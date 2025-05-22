@@ -10,6 +10,15 @@
                 [name]="formControlName"
                 [formControl]="formControl"
         />
+    }
+    @else if(type === 'file'){
+        <input
+                [id]="formControlId"
+                type="file"
+                [name]="formControlName"
+                [formControl]="formControl"
+                (change)="change.emit($event)"
+        />
     } @else {
         <input
                 [id]="formControlId"

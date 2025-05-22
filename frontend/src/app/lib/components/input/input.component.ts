@@ -1,4 +1,4 @@
-import {Component, inject, input, Input, ViewChild} from '@angular/core';
+import {Component, EventEmitter, inject, input, Input, Output, ViewChild} from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl, FormControlDirective,
@@ -36,6 +36,8 @@ export class InputComponent implements ControlValueAccessor{
   @Input() public validationMessages: TInputValidationErrorMessages | null = null;
 
   @ViewChild(FormControlDirective, {static: false}) formControlDirective: FormControlDirective | null = null;
+
+  @Output() change: EventEmitter<Event> = new EventEmitter<Event>();
 
   public get errorMessage(): string | null {
     if (!this.formControl.errors || !this.validationMessages) {
@@ -77,6 +79,7 @@ export class InputComponent implements ControlValueAccessor{
   public setDisabledState(isDisabled: boolean): void {
     this.formControlDirective?.valueAccessor?.setDisabledState!(isDisabled);
   }
+
   private filterMessagesByCode(
       errorMessages: TInputValidationErrorMessages, errorCodes: string[], isTouched: boolean,
   ): string[] {

@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
-import {IAnimal, IAnimalsResponse} from './animal.types';
-import {HttpClient} from '@angular/common/http';
+import {IAnimal, TAnimalPayload} from './animal.types';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Animal } from './animal.model';
 
 @Injectable({
@@ -13,11 +13,55 @@ export class AnimalGateway {
 
   public getAnimals(): Observable<Animal[]> {
 
-    return this.httpClient.get<IAnimalsResponse>('/api/animals/animal/').pipe(
+    return this.httpClient.get<IAnimal[]>('/api/animals/animal/').pipe(
       map(
-        (resp: IAnimalsResponse) => resp.data.map(
+        (resp: IAnimal[]) => resp.map(
           (animal: IAnimal) => new Animal(animal)
         )
+      )
+    )
+  }
+
+  public getAnimal(id: number): Observable<Animal>{
+    return this.httpClient.get<IAnimal>(`/api/animals/animal/${id}/`).pipe(
+      map(
+        (animal: IAnimal) => new Animal(animal)
+      )
+    )
+  }
+
+  public updateAnimal(id: number, data: TAnimalPayload): Observable<Animal> {
+    return this.httpClient.put<IAnimal>(`/api/animals/animal/${id}/`, data).pipe(
+      map(
+        (animal: IAnimal) => new Animal(animal)
+      )
+    )
+  }
+
+  public createAnimal(data: TAnimalPayload): Observable<Animal> {
+    return this.httpClient.post<IAnimal>(`/api/animals/animal/`, { data: {
+        type: 'Animal',
+        attributes: data
+    } } , {
+      headers: new HttpHeaders({ 'content-type': 'application/vnd.api+json'})
+    }).pipe(
+      map(
+        (animal: IAnimal) => new Animal(animal)
+      )
+    )
+  }
+
+  public uploadFile(id: number, file: File): Observable<Animal> {
+    return this.httpClient.post<IAnimal>(
+      `/api/animals/animal/${id}/upload/`,
+      {file},
+      {headers: new HttpHeaders({
+          'content-type': file.type,
+          'Content-Disposition': `attachment; filename="${file.name}"`
+      })}
+    ).pipe(
+      map(
+        (animal: IAnimal) => new Animal(animal)
       )
     )
   }

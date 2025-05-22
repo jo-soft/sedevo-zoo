@@ -1,45 +1,34 @@
-from django.http import JsonResponse
-from rest_framework.parsers import JSONParser
+from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
+from rest_framework.parsers import FileUploadParser
+from rest_framework.response import Response
+from rest_framework import  viewsets
 
-from backend.backend.animals.models import Animal
-from backend.backend.animals.serializers import AnimalSerializer
+from .models import Animal
+from .serializers import AnimalSerializer
+
+class AnimalView(viewsets.ModelViewSet):
+    queryset = Animal.objects.all()
+    serializer_class = AnimalSerializer
 
 
-def animals_list(request):
-    """
-    List all animals, or create a new animal.
-    """
-    if request.method == 'GET':
-        animals = Animal.objects.all()
-        serializer = AnimalSerializer(animals, many=True)
-        return JsonResponse(serializer.data, safe=False)
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = AnimalSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+    @action(
+        detail=True,
+        methods=["POST"],
+        parser_classes=[FileUploadParser],
+    )
+    def upload(self, request, **_kwargs):
+        animal = self.get_object()
 
-def animal(request, pk):
-    """
-    Retrieve, update or delete an animal.
-    """
-    try:
-        animal = Animal.objects.get(pk=pk)
-    except Animal.DoesNotExist:
-        return JsonResponse({'error': 'Animal not found'}, status=404)
+        file_obj = request.data["file"]
 
-    if request.method == 'GET':
-        serializer = AnimalSerializer(animal)
-        return JsonResponse(serializer.data)
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = AnimalSerializer(animal, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
-    elif request.method == 'DELETE':
-        animal.delete()
-        return JsonResponse({'message': 'Animal deleted successfully'}, status=204)
+        if not file_obj:
+            raise ValidationError("No file provided.")
+
+
+        animal_data = AnimalSerializer(animal).data
+        animal_data['hologram'] = file_obj
+        serializer = AnimalSerializer(instance=animal, data=animal_data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=201)

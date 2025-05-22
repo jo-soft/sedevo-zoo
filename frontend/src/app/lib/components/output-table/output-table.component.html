@@ -6,6 +6,7 @@
             <th>Gewicht</th>
             <th>Superpower</th>
             <th>Ausgesorben seit</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -13,8 +14,15 @@
                 <tr>
                     <td>{{ animal.name }}</td>
                     <td>{{ animal.weight }}</td>
-                    <td>Superpower - todo d</td>
+                    <td>{{ animal.superPower }}</td>
                     <td>{{ animal.extinctSince }}</td>
+                    <td class="actions">
+                      <button class="primary-button" (click)=onShowHologram(animal)>Hologram</button>
+                      <a
+                        class="secondary-button"
+                        [routerLink]="['', animal.id]"
+                      > Bearbeiten </a>
+                    </td>
                 </tr>
             }
         </tbody>

@@ -6,16 +6,18 @@ export class Animal{
   public readonly name: string;
   public readonly weight: number;
   public readonly extinctSince: number;
-  public readonly hologram: string | null;
+  public readonly superPower: string;
+  public readonly hologram: unknown;
 
   public constructor(
     data: IAnimal
   ) {
     this.id = data.id
-    this.name = data.attributes.name;
-    this.weight = data.attributes.weight;
-    this.extinctSince = data.attributes.extinct_since;
-    this.hologram = data.attributes.hologram.file;
+    this.name = data.name;
+    this.weight = data.weight;
+    this.extinctSince = data.extinct_since;
+    this.superPower = data.super_power;
+    this.hologram = data.hologram;
   }
 
 }

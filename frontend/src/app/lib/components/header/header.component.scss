@@ -15,11 +15,15 @@ header {
     gap: 0.75rem;
   }
 
-  img {
-    height: 100%;
-    aspect-ratio:  1 / 1;
-    object-fit: cover;
-    border-radius: 12px;
+  .logo {
+    display: contents;
+
+    > img {
+      height: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 12px;
+    }
   }
 
   h1 {

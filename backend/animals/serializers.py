@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from backend.backend.animals.models import Animal
+from .models import Animal
 
+class AnimalSerializer(serializers.ModelSerializer):
 
-class AnimalSerializer(serializers.Serializer):
     class Meta:
         model = Animal
-        fields = ('id', 'name', 'weight', 'extinct_since', 'hologram')
-        read_only_fields = ('id')
+        fields = ('id', 'name', 'weight', 'extinct_since', 'hologram', 'super_power')
+        read_only_fields = ('id',)

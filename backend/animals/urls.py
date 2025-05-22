@@ -1,7 +1,13 @@
-from django.urls import re_path
-import animals.views as views
+from django.urls import include, path
 
-url_patterns = [
-    re_path(r'^animals/$', views.animals_list, name='animals'),
-    re_path(r'^animals/(?P<id>[0-9]+)/$', views.animal, name='animal_detail'),
+from .views import  AnimalView
+
+from rest_framework.routers import DefaultRouter
+
+# Create a router and register our ViewSets with it.
+router = DefaultRouter()
+router.register(r'animal', AnimalView)
+
+urlpatterns = [
+    path('', include(router.urls)),
 ]

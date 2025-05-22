@@ -3,19 +3,10 @@
 body {
 
 
-  /* CSS HEX */
-  --carolina-blue: #7bb4ccff;
-  --platinum: #dee7e7ff;
-  --baby-blue: #94c4e3ff;
-  --jade: #35aa7aff;
-  --pistachio: #b8d37bff;
-  --asparagus: #759d5eff;
-
-
-  --color-primary: #35aa7aff;
+  --color-primary: #154431;
   --color-highlight: #005b41;
   --color-alert: #82AA20;
-  --color-black: #1E813;
+  --color-black: #050505;
   --color-white: #FAFAFA;
   --color-white-off: #DEE7E7FF;
 
@@ -23,6 +14,8 @@ body {
   --font-size-big: 2rem;
   --font-size-small: .75rem;
   --font-size-normal: 1rem;
+
+  --button-borer-radius: 8px;
 
   margin: 0;
 }
@@ -44,4 +37,47 @@ p {
 
 input {
   border-color: transparent;
+}
+
+a {
+  text-decoration: navajowhite;
+}
+
+.primary-button, .secondary-button {
+  font-weight: 500;
+  font-size: var(--font-size-normal);
+  padding: 0.7em 1.4em 0.7em 1.1em;
+  border: none;
+  letter-spacing: 0.05em;
+  border-radius: var(--button-borer-radius);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition: scale 0.1s linear, color 0.1s linear;
+  color: var(--text-color, var(--color-primary));
+  &:hover {
+    scale: 1.05;
+  }
+}
+
+.primary-button {
+  --text-color: var(--color-white-off);
+  background: linear-gradient(0deg, var(--color-primary), var(--color-alert) 100%);
+  box-shadow: 0 0.3em .5em -0.2em var(--color-primary);
+  transition: scale 0.1s linear, color 0.1s linear;
+
+  &:hover {
+    --text-color: var(--color-white);
+  }
+}
+
+
+.secondary-button {
+  border: 1px solid var(--color-primary);
+
+  &:hover {
+    --text-color: var(--color-alert);
+    border-color: var(--color-alert);
+  }
 }

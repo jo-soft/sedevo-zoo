@@ -1,16 +1,10 @@
 export interface IAnimal {
-  type: "Animal",
-  id: number,
-  attributes: {
-    name: string,
-    weight: number,
-    extinct_since: number,
-    hologram: {
-      id: number,
-      file: string | null // todo adjust
-    }
-  }
+  id: number;
+  name: string,
+  weight: number,
+  extinct_since: number,
+  super_power: string,
+  hologram: unknown
 }
-export interface IAnimalsResponse {
-  data: IAnimal[]
-}
+
+export type TAnimalPayload =  Omit<IAnimal, 'hologram' | 'id'>

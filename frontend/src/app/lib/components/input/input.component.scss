@@ -16,11 +16,11 @@
   }
 
   input {
-    border-bottom: 1px solid var(--color-black);
+    border-bottom: 1px solid var(--color-primary);
     color: var(--color-primary);
     font-size: var(--font-size-normal);
     outline: none;
-    margin-bottom: 6px;
+    padding: 6px;
     display: flex;
 
     &:focus {
@@ -34,5 +34,25 @@
     flex: 1;
     justify-content: space-between;
     width: 100%;
+  }
+}
+
+
+::file-selector-button {
+  font-weight: 300;
+  font-size: var(--font-size-normal);
+  margin: 0.1rem .2rem 0.1rem .15rem;
+  padding: .3rem .3rem .5rem .3rem;
+  border: none;
+  letter-spacing: 0.05em;
+  border-radius: var(--button-borer-radius);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition: scale 0.1s linear, color 0.1s linear;
+  color: var(--text-color, var(--color-primary));
+  &:hover {
+    scale: 1.05;
   }
 }
