@@ -32,6 +32,7 @@ export class InputComponent implements ControlValueAccessor{
 
   @Input() public label: string = '';
   @Input() public type: string = 'text';
+  @Input() public accept: string = '*';
   @Input({ required: true }) public formControlName!: string
   @Input() public validationMessages: TInputValidationErrorMessages | null = null;
 

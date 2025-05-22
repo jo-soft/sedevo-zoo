@@ -128,3 +128,4 @@ REST_FRAMEWORK = {
 }
 
 MEDIA_ROOT = "uploads/"
+STATIC_ROOT = "static/"

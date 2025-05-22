@@ -17,17 +17,24 @@
                     <td>{{ animal.superPower }}</td>
                     <td>{{ animal.extinctSince }}</td>
                     <td class="actions">
-                      <button class="primary-button" (click)=onShowHologram(animal)>Hologram</button>
+                      <button
+                        class="primary-button"
+                        (click)=onShowHologram(animal)
+                        [disabled]="!animal.hologram"
+                      >Hologram</button>
                       <a
                         class="secondary-button"
-                        [routerLink]="['', animal.id]"
+                        [routerLink]="['edit', animal.id]"
                       > Bearbeiten </a>
+                      <button
+                        class="secondary-button"
+                        (click)=onDeleteAnimalClicked.emit(animal)
+                      >Löschen</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-
 } @else {
     <p>
         Dein Zoo ist noch leer. Füge Tiere hinzu!

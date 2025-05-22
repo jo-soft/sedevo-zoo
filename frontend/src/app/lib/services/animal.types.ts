@@ -4,7 +4,7 @@ export interface IAnimal {
   weight: number,
   extinct_since: number,
   super_power: string,
-  hologram: unknown
+  hologram: string | null;
 }
 
 export type TAnimalPayload =  Omit<IAnimal, 'hologram' | 'id'>

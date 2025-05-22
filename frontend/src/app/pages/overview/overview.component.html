@@ -1,4 +1,22 @@
 <div>
   <h2>Inventarliste</h2>
-  <app-output-table [data]="animals.value()"></app-output-table>
+  <app-output-table
+    (onShowHologramClick)="showHologramModal($event)"
+    (onDeleteAnimalClicked)="deleteAnimal($event)"
+    [data]="animals.value()
+"></app-output-table>
+
+  @if(hologramUrl){
+    <app-hologram-modal
+      title="Modell"
+      [path]="hologramUrl"
+      (close)="hideHologramModal()"
+    ></app-hologram-modal>
+  }
+
+  <div class="button-container">
+    <a class="add-button" [routerLink]="['new']">
+      <span>+</span>
+    </a>
+  </div>
 </div>

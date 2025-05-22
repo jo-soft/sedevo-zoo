@@ -15,7 +15,7 @@ body {
   --font-size-small: .75rem;
   --font-size-normal: 1rem;
 
-  --button-borer-radius: 8px;
+  --button-border-radius: 8px;
 
   margin: 0;
 }
@@ -43,20 +43,31 @@ a {
   text-decoration: navajowhite;
 }
 
+a, button {
+  background: #FFFFFF;
+}
+
 .primary-button, .secondary-button {
   font-weight: 500;
   font-size: var(--font-size-normal);
   padding: 0.7em 1.4em 0.7em 1.1em;
   border: none;
   letter-spacing: 0.05em;
-  border-radius: var(--button-borer-radius);
+  border-radius: var(--button-border-radius);
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
   transition: scale 0.1s linear, color 0.1s linear;
   color: var(--text-color, var(--color-primary));
-  &:hover {
+
+
+  &:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
     scale: 1.05;
   }
 }
@@ -76,7 +87,7 @@ a {
 .secondary-button {
   border: 1px solid var(--color-primary);
 
-  &:hover {
+  &:hover:not(:disabled) {
     --text-color: var(--color-alert);
     border-color: var(--color-alert);
   }

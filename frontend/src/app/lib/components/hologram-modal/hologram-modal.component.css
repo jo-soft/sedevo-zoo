@@ -1,0 +1,51 @@
+dialog{
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 0.5rem;
+  border-radius: 12px;
+  border: 1px solid oklch(from var(--color-white-off) calc(l * .75) c h);
+  background: oklch(from var(--color-white) calc(l + .25) c h);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  button {
+    color: var(--color-primary);
+    outline: none;
+    background-color: transparent;
+    border: 0;
+    font-size: var(--font-size-normal);
+    font-weight: 900;
+  }
+}
+
+.modal-content {
+  background-color: var(--color-white);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.modal-close-btn {
+  background-color: var(--color-white-off);
+  color: var(--color-primary);
+  border-radius: var(--button-border-radius);
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+
+button {
+  transition: scale 0.1s linear, color 0.1s linear;
+  &:hover {
+    scale: 1.1;
+  }
+}

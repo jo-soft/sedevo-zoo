@@ -30,6 +30,10 @@ export class AnimalGateway {
     )
   }
 
+  public deleteAnimal(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`/api/animals/animal/${id}/`)
+  }
+
   public updateAnimal(id: number, data: TAnimalPayload): Observable<Animal> {
     return this.httpClient.put<IAnimal>(`/api/animals/animal/${id}/`, data).pipe(
       map(
@@ -39,12 +43,7 @@ export class AnimalGateway {
   }
 
   public createAnimal(data: TAnimalPayload): Observable<Animal> {
-    return this.httpClient.post<IAnimal>(`/api/animals/animal/`, { data: {
-        type: 'Animal',
-        attributes: data
-    } } , {
-      headers: new HttpHeaders({ 'content-type': 'application/vnd.api+json'})
-    }).pipe(
+    return this.httpClient.post<IAnimal>(`/api/animals/animal/`, data).pipe(
       map(
         (animal: IAnimal) => new Animal(animal)
       )

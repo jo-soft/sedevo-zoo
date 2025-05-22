@@ -7,7 +7,7 @@ export class Animal{
   public readonly weight: number;
   public readonly extinctSince: number;
   public readonly superPower: string;
-  public readonly hologram: unknown;
+  public readonly hologram: string | null;
 
   public constructor(
     data: IAnimal

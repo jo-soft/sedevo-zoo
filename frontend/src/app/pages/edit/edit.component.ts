@@ -3,9 +3,10 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {Animal} from '../../lib/services/animal.model';
 import {InputComponent} from '../../lib/components/input/input.component';
 import {AnimalGateway} from '../../lib/services/animal.gateway';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 import {TAnimalPayload} from '../../lib/services/animal.types';
+import {ModelViewerComponent} from '../../lib/components/hologram/hologram.component';
 
 interface IForm {
   name: FormControl<string | null>
@@ -18,15 +19,19 @@ interface IForm {
   selector: 'app-edit',
   imports: [
     InputComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ModelViewerComponent
   ],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.css'
 })
 export class EditComponent  implements OnInit {
 
+  public hologramUrl: string | null = null
+
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly gateway: AnimalGateway = inject(AnimalGateway);
+  private readonly router: Router = inject(Router);
 
   private animalId: number | null = null
   private newFile: File | null = null;
@@ -41,9 +46,9 @@ export class EditComponent  implements OnInit {
 
   public ngOnInit(): void {
     this.animalId = this.route.snapshot.params['id'];
-    if (this.animalId)  {
+    if (this.animalId) {
       this.gateway.getAnimal(this.route.snapshot.params['id']).subscribe((animal: Animal) => {
-//        this.animal = animal;
+        this.hologramUrl = animal.hologram;
         this.form.patchValue({
           name: animal.name,
           weight: animal.weight,
@@ -73,20 +78,17 @@ export class EditComponent  implements OnInit {
       super_power: this.form.value.superPower || '',
     }
 
-
-
     if (this.route.snapshot.params['id']) {
       await firstValueFrom(this.gateway.updateAnimal(this.animalId!, data));
-    }
-    else {
+    } else {
       const newAnimal: Animal = await firstValueFrom(this.gateway.createAnimal(data));
       this.animalId = newAnimal.id;
     }
 
-    if(this.newFile) {
+    if (this.newFile) {
       await firstValueFrom(this.gateway.uploadFile(this.animalId!, this.newFile));
     }
 
+    await this.router.navigate([''])
   }
-
 }

@@ -15,6 +15,7 @@
         <input
                 [id]="formControlId"
                 type="file"
+                [accept]="accept"
                 [name]="formControlName"
                 [formControl]="formControl"
                 (change)="change.emit($event)"

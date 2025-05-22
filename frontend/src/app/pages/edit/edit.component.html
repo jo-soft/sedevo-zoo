@@ -1,37 +1,46 @@
-<div>
-<form [formGroup]="form" class="form">
-  <app-input
-    label="Name"
-    type="text"
-    formControlName="name"
-    [validationMessages]="{required: 'Ein Tier braucht einen namen', maxLength: 'Der Name darf nicht länger als 100 Zeichen sein'}"
-  />
-  <app-input
-    label="Gewicht"
-    type="number"
-    formControlName="weight"
-    [validationMessages]="{min: 'Das Gewicht muss größer 0 sein'}"
-  />
-  <app-input
-    label="Super Power"
-    type="text"
-    formControlName="superPower"
-    [validationMessages]="{maxLength: 'Die Superkraft darf nicht länger als 100 Zeichen sein'}"
-  />
-  <app-input
-    label="Ausgestorben seit"
-    type="number"
-    formControlName="extinctSince"
-    [validationMessages]="{required: 'Wir haben nur ausgestorbene Tiere', min: 'Wir haben nur ausgestorbene Tiere'}"
-  />
-  <app-input
-    label="Threee.js Modellt"
-    type="file"
-    formControlName="model"
-    (change)="onFileInoutChange($event)"
-  />
-</form>
-<button class="primary-button" (click)="save()">
-  Speichern
-</button>
-</div>
+  <form [formGroup]="form">
+    <app-input
+      label="Name"
+      type="text"
+      formControlName="name"
+      [validationMessages]="{required: 'Ein Tier braucht einen namen', maxLength: 'Der Name darf nicht länger als 100 Zeichen sein'}"
+    />
+    <app-input
+      label="Gewicht"
+      type="number"
+      formControlName="weight"
+      [validationMessages]="{min: 'Das Gewicht muss größer 0 sein'}"
+    />
+    <app-input
+      label="Super Power"
+      type="text"
+      formControlName="superPower"
+      [validationMessages]="{maxLength: 'Die Superkraft darf nicht länger als 100 Zeichen sein'}"
+    />
+    <app-input
+      label="Ausgestorben seit"
+      type="number"
+      formControlName="extinctSince"
+      [validationMessages]="{required: 'Wir haben nur ausgestorbene Tiere', min: 'Wir haben nur ausgestorbene Tiere'}"
+    />
+    <app-input
+      label="Modell (als gltf Binärdatei)"
+      type="file"
+      formControlName="model"
+      accept="model/gltf-binary"
+      (change)="onFileInoutChange($event)"
+    />
+  </form>
+  @if(hologramUrl){
+    <app-hologram [path]="hologramUrl"/>
+  }
+  @else {
+    <div>
+      <p>Du hast noch kein Modell hochgeladen</p>
+    </div>
+  }
+  <div>
+    <button class="primary-button" (click)="save()">
+      Speichern
+    </button>
+  </div>

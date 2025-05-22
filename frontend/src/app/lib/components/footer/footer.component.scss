@@ -21,4 +21,8 @@ footer {
     grid-template-columns: repeat(3, max-content);
     gap: 0.75rem;
   }
+
+  a {
+    background: transparent;
+  }
 }

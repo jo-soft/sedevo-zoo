@@ -6,3 +6,30 @@
   justify-content: flex-start;
 }
 
+
+
+.button-container {
+  position: fixed;
+  bottom: 3.5rem;
+  right: 2rem;
+
+  a {
+    border-radius: 50%;
+    display: grid;
+    transition: scale .4s linear, transform .4s ease-in-out;
+    &:hover {
+      scale: 1.1;
+      transform: rotate(180deg);
+    }
+
+    span {
+      border-radius: 50%;
+      border: 1px solid var(--color-primary);
+      aspect-ratio: 1;
+      text-align: center;
+      font-weight: 700;
+      font-size: var(--font-size-big);
+
+    }
+  }
+}

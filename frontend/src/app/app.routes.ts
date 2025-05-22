@@ -8,7 +8,11 @@ export const routes: Routes = [
     component: OverviewComponent
   },
   {
-    path: ':id',
+    path: 'edit/:id',
+    component: EditComponent
+  },
+  {
+    path: 'new',
     component: EditComponent
   }
 ];
