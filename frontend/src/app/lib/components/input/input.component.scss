@@ -1,0 +1,38 @@
+.control-container {
+  display: flex;
+  flex-flow: column;
+  position: relative;
+  flex-direction: column;
+
+  &.has-error {
+    input {
+      border-bottom-color: var(--color-alert);
+    }
+  }
+
+  .control-validation-error {
+    color: var(--color-alert);
+    font-size: var(--font-size-small);
+  }
+
+  input {
+    border-bottom: 1px solid var(--color-black);
+    color: var(--color-primary);
+    font-size: var(--font-size-normal);
+    outline: none;
+    margin-bottom: 6px;
+    display: flex;
+
+    &:focus {
+      border-bottom-color: lch(from var(--color-primary) l calc( c + 130) h);
+    }
+  }
+
+  label {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    width: 100%;
+  }
+}

@@ -1,0 +1,27 @@
+@if(data.length){
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Gewicht</th>
+            <th>Superpower</th>
+            <th>Ausgesorben seit</th>
+        </tr>
+        </thead>
+        <tbody>
+            @for( animal of data; track animal.id){
+                <tr>
+                    <td>{{ animal.name }}</td>
+                    <td>{{ animal.weight }}</td>
+                    <td>Superpower - todo d</td>
+                    <td>{{ animal.extinctSince }}</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+} @else {
+    <p>
+        Dein Zoo ist noch leer. Füge Tiere hinzu!
+    </p>
+}

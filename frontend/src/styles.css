@@ -1,1 +1,47 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols:wght@100..900&display=swap');
+
+body {
+
+
+  /* CSS HEX */
+  --carolina-blue: #7bb4ccff;
+  --platinum: #dee7e7ff;
+  --baby-blue: #94c4e3ff;
+  --jade: #35aa7aff;
+  --pistachio: #b8d37bff;
+  --asparagus: #759d5eff;
+
+
+  --color-primary: #35aa7aff;
+  --color-highlight: #005b41;
+  --color-alert: #82AA20;
+  --color-black: #1E813;
+  --color-white: #FAFAFA;
+  --color-white-off: #DEE7E7FF;
+
+  --font-size-huge: 3rem;
+  --font-size-big: 2rem;
+  --font-size-small: .75rem;
+  --font-size-normal: 1rem;
+
+  margin: 0;
+}
+
+* {
+  font-family: 'Noto Sans', sans-serif;
+
+  color: var(--color-primary);
+}
+
+
+h1 {
+  color: var(--color-highlight);
+}
+
+p {
+  color: var(--color-primary);
+}
+
+input {
+  border-color: transparent;
+}

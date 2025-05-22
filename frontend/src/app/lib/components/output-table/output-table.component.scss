@@ -1,0 +1,31 @@
+table {
+  --color-border:  lch(from var(--color-white) calc(l - 10) c h);
+
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  text-align: left;
+}
+
+thead tr {
+  background-color: var(--color-white);
+  border-bottom: 2px solid var(--color-border);
+}
+
+th, td {
+  padding: 12px 15px;
+  border: 1px solid var(--color-border);
+}
+
+tbody tr:nth-child(even) {
+  background-color: var(--color-snow-drift);
+}
+
+tbody tr:hover {
+  background-color: lch(from var(--color-snow-drift) calc(l - 10) c h);
+}
+
+p {
+  margin-top: 20px;
+}

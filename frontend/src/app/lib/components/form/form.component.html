@@ -1,0 +1,26 @@
+<form [formGroup]="form" class="form">
+    <app-input
+            label="Darlehensbetrag"
+            type="number"
+            formControlName="amount"
+            [validationMessages]="{required: 'Bitte Darlehensbetrag angeben', min: 'Darlehensbetrag muss positiv sein'}"
+    />
+    <app-input
+            label="Sollzins"
+            type="number"
+            formControlName="normalInterestRate"
+            [validationMessages]="{required: 'Bitte Sollzins angeben'}"
+    />
+    <app-input
+            label="Tilgung"
+            type="number"
+            formControlName="repaymentRate"
+            [validationMessages]="{required: 'Bitte Tilgung angeben', min: 'Tilgung muss positiv sein'}"
+    />
+    <app-input
+            label="Zinsbindung"
+            type="number"
+            formControlName="fixedInterestRate"
+            [validationMessages]="{required: 'Bitte Zinsbindung angeben', min: 'Zinsbindung muss positiv sein'}"
+    />
+</form>
