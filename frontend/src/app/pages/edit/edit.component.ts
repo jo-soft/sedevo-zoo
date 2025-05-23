@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 import {TAnimalPayload} from '../../lib/services/animal.types';
 import {ModelViewerComponent} from '../../lib/components/hologram/hologram.component';
+import {ToastService} from '../../lib/services/toast.service';
 
 interface IForm {
   name: FormControl<string | null>
@@ -31,6 +32,7 @@ export class EditComponent  implements OnInit {
 
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly gateway: AnimalGateway = inject(AnimalGateway);
+  private readonly toast: ToastService = inject(ToastService)
   private readonly router: Router = inject(Router);
 
   private animalId: number | null = null
@@ -79,17 +81,22 @@ export class EditComponent  implements OnInit {
       super_power: this.form.value.superPower || '',
     }
 
-    if (this.route.snapshot.params['id']) {
-      await firstValueFrom(this.gateway.updateAnimal(this.animalId!, data));
-    } else {
-      const newAnimal: Animal = await firstValueFrom(this.gateway.createAnimal(data));
-      this.animalId = newAnimal.id;
-    }
+    try {
+      if (this.route.snapshot.params['id']) {
+        await firstValueFrom(this.gateway.updateAnimal(this.animalId!, data));
+      } else {
+        const newAnimal: Animal = await firstValueFrom(this.gateway.createAnimal(data));
+        this.animalId = newAnimal.id;
+      }
 
-    if (this.newFile) {
-      await firstValueFrom(this.gateway.uploadFile(this.animalId!, this.newFile));
+      if (this.newFile) {
+        await firstValueFrom(this.gateway.uploadFile(this.animalId!, this.newFile));
+      }
+      this.toast.setMessage('Tier gespeichert');
+      await this.router.navigate([''])
     }
-
-    await this.router.navigate([''])
+    catch (e) {
+      this.toast.setMessage('Ooops, da ist etwas schiefgelaufen');
+    }
   }
 }

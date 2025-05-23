@@ -8,6 +8,7 @@ import {firstValueFrom} from 'rxjs';
 import {ModalComponent} from '../../lib/components/modal/modal.component';
 import {ModelViewerComponent} from '../../lib/components/hologram/hologram.component';
 import {LoadingSpinnerComponent} from '../../lib/components/loading-spinner/loading-spinner.component';
+import {ToastService} from '../../lib/services/toast.service';
 
 @Component({
   selector: 'app-overview',
@@ -24,6 +25,7 @@ import {LoadingSpinnerComponent} from '../../lib/components/loading-spinner/load
 export class OverviewComponent {
 
   private readonly gateway: AnimalGateway = inject(AnimalGateway)
+  private readonly toast: ToastService = inject(ToastService)
 
   public hologramUrl: string | null = null
   public animalToDelete: Animal | null = null
@@ -50,6 +52,7 @@ export class OverviewComponent {
     if(closed) {
       await firstValueFrom(this.gateway.deleteAnimal(this.animalToDelete!.id));
       this.animals.reload()
+      this.toast.setMessage('Tier gelöscht');
     }
     this.animalToDelete = null;
 

@@ -1,16 +1,26 @@
-<header>
-  <a class="logo" [routerLink]="['/']">
-    <img
-        src="/logo.png"
-        alt="Logo"
-    />
-  </a>
-  <a [routerLink]="['/']">
-    <h1>Sedevo Zoo</h1>
-  </a>
-  @if( loadingService.isLoading | async){
-    <div class="loading">
-      <app-loading-spinner></app-loading-spinner>
-    </div>
+<div  class="header-wrapper">
+  <header>
+    <a class="logo" [routerLink]="['/']">
+      <img
+          src="/logo.png"
+          alt="Logo"
+      />
+    </a>
+    <a [routerLink]="['/']">
+      <h1>Sedevo Zoo</h1>
+    </a>
+    @if( loadingService.isLoading | async){
+      <div class="loading">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+    }
+  </header>
+  @let message = messages$ | async;
+  @if(message){
+  <div class="toast">
+    <p>
+      {{ message }}
+    </p>
+  </div>
   }
-</header>
+</div>

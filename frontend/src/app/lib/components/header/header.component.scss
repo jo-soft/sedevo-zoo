@@ -9,7 +9,6 @@ header {
 
   padding: 1rem;
   border-bottom: 1px solid var(--color-primary);
-  margin-bottom: 1.4rem;
 
   @media screen and (min-width: 480px) {
     grid-template-rows: 3.5rem;
@@ -36,5 +35,21 @@ header {
     @media screen and (min-width: 480px) {
       font-size: var(--font-size-big);
     }
+  }
+}
+
+.header-wrapper {
+  margin-bottom: 1.4rem;
+}
+.toast {
+  background: oklch(from var(--color-white) calc(l - .1) c h);
+  color: var(--color-alert);
+  padding: 1rem;
+
+  p {
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+
   }
 }
