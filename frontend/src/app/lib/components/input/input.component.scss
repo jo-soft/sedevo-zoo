@@ -22,6 +22,7 @@
     outline: none;
     padding: 6px;
     display: flex;
+    min-height: 32px;
 
     &:focus {
       border-bottom-color: lch(from var(--color-primary) l calc( c + 130) h);

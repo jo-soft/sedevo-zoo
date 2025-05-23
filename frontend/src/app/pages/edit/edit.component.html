@@ -3,13 +3,13 @@
       label="Name"
       type="text"
       formControlName="name"
-      [validationMessages]="{required: 'Ein Tier braucht einen namen', maxLength: 'Der Name darf nicht länger als 100 Zeichen sein'}"
+      [validationMessages]="{required: 'Ein Tier benötigt einen namen', maxLength: 'Der Name darf nicht länger als 100 Zeichen sein'}"
     />
     <app-input
       label="Gewicht"
       type="number"
       formControlName="weight"
-      [validationMessages]="{min: 'Das Gewicht muss größer 0 sein'}"
+      [validationMessages]="{required: 'Jedes Tier benötigt ein Gewicht', min: 'Das Gewicht muss größer 0 sein'}"
     />
     <app-input
       label="Super Power"

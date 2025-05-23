@@ -1,17 +1,36 @@
 <div>
   <h2>Inventarliste</h2>
-  <app-output-table
-    (onShowHologramClick)="showHologramModal($event)"
-    (onDeleteAnimalClicked)="deleteAnimal($event)"
-    [data]="animals.value()
-"></app-output-table>
+
+  @if(animals.isLoading()){
+    <div class="loading">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+  } @else {
+    <app-output-table
+      (onShowHologramClick)="showHologramModal($event)"
+      (onDeleteAnimalClicked)="deleteAnimal($event)"
+      [data]="animals.value()"></app-output-table>
+  }
 
   @if(hologramUrl){
-    <app-hologram-modal
+    <app-modal
       title="Modell"
-      [path]="hologramUrl"
       (close)="hideHologramModal()"
-    ></app-hologram-modal>
+    >
+      <app-hologram [path]="hologramUrl" [width]="500" [height]="500"/>
+    </app-modal>
+  }
+  @if(animalToDelete){
+    <app-modal
+      title="Tier Löschen"
+      (close)="onDeleteConfirmClosed($event)"
+      closeText="Löschen"
+      dismissText="Abbrechen"
+    >
+      <p>
+        Soll {{ animalToDelete.name }} wirklich gelöscht werden?
+      </p>
+    </app-modal>
   }
 
   <div class="button-container">

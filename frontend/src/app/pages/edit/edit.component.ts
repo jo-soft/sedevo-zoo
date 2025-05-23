@@ -38,9 +38,9 @@ export class EditComponent  implements OnInit {
 
   public readonly form: FormGroup<IForm> = new FormGroup<IForm>({
     name: new FormControl(null, {validators: [Validators.required, Validators.maxLength(100)]}),
-    weight: new FormControl(null, {validators: [Validators.min(0)]}),
-    superPower: new FormControl(null, {validators: [Validators.maxLength(100)]}),
-    extinctSince: new FormControl(null, {validators: [Validators.min(0)]}),
+    weight: new FormControl(null, {validators: [Validators.required, Validators.min(0)]}),
+    superPower: new FormControl(null, {validators: [Validators.required, Validators.maxLength(100)]}),
+    extinctSince: new FormControl(null, {validators: [Validators.required, Validators.min(0)]}),
     model: new FormControl(null)
   })
 
@@ -67,6 +67,7 @@ export class EditComponent  implements OnInit {
   }
 
   public async save(): Promise<void> {
+    this.form.updateValueAndValidity();
     if (this.form.invalid) {
       return;
     }

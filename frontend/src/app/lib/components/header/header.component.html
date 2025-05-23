@@ -8,4 +8,9 @@
   <a [routerLink]="['/']">
     <h1>Sedevo Zoo</h1>
   </a>
+  @if( loadingService.isLoading | async){
+    <div class="loading">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+  }
 </header>

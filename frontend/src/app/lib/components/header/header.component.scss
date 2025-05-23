@@ -1,7 +1,8 @@
 header {
   display: grid;
   grid-template-rows: 2rem;
-  grid-template-columns: min-content auto;
+  grid-template-columns: min-content auto auto;
+  justify-content: space-between;
   gap: 0.5rem;
   align-items: center;
   background: linear-gradient(12deg, var(--color-white), var(--color-white-off));

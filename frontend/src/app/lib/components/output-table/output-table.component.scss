@@ -19,11 +19,11 @@ th, td {
 }
 
 tbody tr:nth-child(even) {
-  background-color: var(--color-snow-drift);
+  background-color: var(--color-white-off);
 }
 
 tbody tr:hover {
-  background-color: lch(from var(--color-snow-drift) calc(l - 10) c h);
+  background-color: lch(from var(--color-white-off) calc(l - 10) c h);
 }
 
 p {
