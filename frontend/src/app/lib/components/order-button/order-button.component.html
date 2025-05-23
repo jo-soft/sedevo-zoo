@@ -1,0 +1,13 @@
+<button (click)="toggleOrder()">
+  @switch (orderDirection){
+    @case (orderEnum.Ascending) {
+      &uarr;
+    }
+    @case (orderEnum.Descending) {
+      &darr;
+    }
+    @default {
+      ⇅
+    }
+  }
+</button>

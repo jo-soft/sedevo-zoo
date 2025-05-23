@@ -5,12 +5,62 @@
     <div class="loading">
       <app-loading-spinner></app-loading-spinner>
     </div>
-  } @else {
-    <app-output-table
-      (onShowModelClick)="showModelModal($event)"
-      (onDeleteAnimalClicked)="deleteAnimal($event)"
-      [data]="animals.value()"></app-output-table>
   }
+  <table [hidden]="animals.isLoading()">
+        <thead>
+        <tr>
+          <th>
+            <span>
+              Name
+            </span>
+            <app-order-by-button field="name" (order)="nameOrder.set($event)"></app-order-by-button>
+          </th>
+          <th>
+            <span>
+              Gewicht
+            </span>
+            <app-order-by-button field="weight" (order)="weightOrder.set($event)"></app-order-by-button>
+          </th>
+          <th>
+            <span>
+              Superpower
+            </span>
+          </th>
+          <th>
+            <span>
+              Ausgesorben seit
+            </span>
+            <app-order-by-button field="extinct_since" (order)="extinctSinceOrder.set($event)"></app-order-by-button>
+          </th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+          @for( animal of animals.value(); track animal.id){
+            <tr>
+              <td>{{ animal.name }}</td>
+              <td>{{ animal.weight }}</td>
+              <td>{{ animal.superPower }}</td>
+              <td>{{ animal.extinctSince }}</td>
+              <td class="actions">
+                <button
+                  class="primary-button"
+                  (click)=showModelModal(animal)
+                  [disabled]="!animal.model"
+                >Model</button>
+                <a
+                  class="secondary-button"
+                  [routerLink]="['edit', animal.id]"
+                > Bearbeiten </a>
+                <button
+                  class="secondary-button"
+                  (click)=deleteAnimal(animal)
+                >Löschen</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+  </table>
 
   @if(modelUrl){
     <app-modal

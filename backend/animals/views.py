@@ -1,3 +1,5 @@
+from django.core.exceptions import FieldError
+from django.db.models import Q
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.parsers import FileUploadParser
@@ -10,6 +12,27 @@ from .serializers import AnimalSerializer
 class AnimalView(viewsets.ModelViewSet):
     queryset = Animal.objects.all()
     serializer_class = AnimalSerializer
+
+    def get_queryset(self):
+        params = self.request.query_params
+        qs = super().get_queryset()
+
+        orders = filter(lambda x: x, params.getlist("order[]", []))
+
+        qs = qs.filter(
+            Q(name__icontains=params.get("name", "")),
+            Q(weight__gte=params.get("weight_gte", 0)),
+            Q(extinct_since__gte=params.get("extinct_since_gte", 0)),
+        )
+
+        if (orders):
+            try:
+                return qs.order_by(*orders)
+            except FieldError:
+                pass
+        return qs
+
+
 
 
     @action(

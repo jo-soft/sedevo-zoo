@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
 import {IAnimal, TAnimalPayload} from './animal.types';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Animal } from './animal.model';
 
 @Injectable({
@@ -11,9 +11,9 @@ export class AnimalGateway {
 
   private readonly httpClient: HttpClient = inject(HttpClient)
 
-  public getAnimals(): Observable<Animal[]> {
+  public getAnimals(params: HttpParams): Observable<Animal[]> {
 
-    return this.httpClient.get<IAnimal[]>('/api/animals/animal/').pipe(
+    return this.httpClient.get<IAnimal[]>('/api/animals/animal/', { params }).pipe(
       map(
         (resp: IAnimal[]) => resp.map(
           (animal: IAnimal) => new Animal(animal)

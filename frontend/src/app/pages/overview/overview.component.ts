@@ -1,23 +1,24 @@
-import {Component, inject, ResourceRef} from '@angular/core';
+import {Component, inject, ResourceLoaderParams, ResourceRef, signal, Signal, WritableSignal} from '@angular/core';
 import {AnimalGateway} from '../../lib/services/animal.gateway';
 import {Animal} from '../../lib/services/animal.model';
-import { rxResource } from '@angular/core/rxjs-interop';
-import {OutputTableComponent} from '../../lib/components/output-table/output-table.component';
+import {rxResource, RxResourceOptions} from '@angular/core/rxjs-interop';
 import {RouterLink} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 import {ModalComponent} from '../../lib/components/modal/modal.component';
 import {ModelViewerComponent} from '../../lib/components/model/model.component';
 import {LoadingSpinnerComponent} from '../../lib/components/loading-spinner/loading-spinner.component';
 import {ToastService} from '../../lib/services/toast.service';
+import {OrderButtonComponent} from '../../lib/components/order-button/order-button.component';
+import {HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'app-overview',
   imports: [
-    OutputTableComponent,
     RouterLink,
     ModalComponent,
     ModelViewerComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    OrderButtonComponent
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.css'
@@ -30,9 +31,19 @@ export class OverviewComponent {
   public modelUrl: string | null = null
   public animalToDelete: Animal | null = null
 
-  public readonly animals: ResourceRef<Animal[]> = rxResource<Animal[], void>({
+  public nameOrder: WritableSignal<string>  = signal<string>('')
+  public weightOrder: WritableSignal<string> = signal<string>('')
+  public extinctSinceOrder: WritableSignal<string> = signal<string>('')
+
+  public readonly animals: ResourceRef<Animal[]> = rxResource<Animal[], HttpParams>({
     defaultValue: [],
-    loader: () => this.gateway.getAnimals()
+    request: () =>
+      new HttpParams()
+        .append('order[]', this.nameOrder())
+        .append('order[]', this.weightOrder())
+        .append('order[]', this.extinctSinceOrder()),
+    loader: (params: ResourceLoaderParams<HttpParams> ) =>
+      this.gateway.getAnimals(params.request)
   })
 
   public async deleteAnimal(animal: Animal): Promise<void> {
@@ -58,4 +69,5 @@ export class OverviewComponent {
 
   }
 
+  protected readonly eval = eval;
 }
