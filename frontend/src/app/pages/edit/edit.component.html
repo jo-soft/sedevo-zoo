@@ -31,8 +31,8 @@
       (change)="onFileInoutChange($event)"
     />
   </form>
-  @if(hologramUrl){
-    <app-hologram [path]="hologramUrl"/>
+  @if(modelUrl){
+    <app-model [path]="modelUrl"/>
   }
   @else {
     <div>

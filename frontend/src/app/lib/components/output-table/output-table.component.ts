@@ -13,11 +13,11 @@ import {RouterLink} from '@angular/router';
 export class OutputTableComponent {
 
   @Input({ required: true}) public data: Animal[] = [];
-  @Output() public onShowHologramClick: EventEmitter<Animal> = new EventEmitter<Animal>();
+  @Output() public onShowModelClick: EventEmitter<Animal> = new EventEmitter<Animal>();
   @Output() public onDeleteAnimalClicked: EventEmitter<Animal> = new EventEmitter<Animal>();
 
 
-  public onShowHologram(animal: Animal): void {
-    this.onShowHologramClick.emit(animal);
+  public onShowModel(animal: Animal): void {
+    this.onShowModelClick.emit(animal);
   }
 }

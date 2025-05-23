@@ -19,9 +19,9 @@
                     <td class="actions">
                       <button
                         class="primary-button"
-                        (click)=onShowHologram(animal)
-                        [disabled]="!animal.hologram"
-                      >Hologram</button>
+                        (click)=onShowModel(animal)
+                        [disabled]="!animal.model"
+                      >Model</button>
                       <a
                         class="secondary-button"
                         [routerLink]="['edit', animal.id]"

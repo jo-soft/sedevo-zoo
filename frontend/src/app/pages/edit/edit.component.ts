@@ -6,7 +6,7 @@ import {AnimalGateway} from '../../lib/services/animal.gateway';
 import {ActivatedRoute, Router} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 import {TAnimalPayload} from '../../lib/services/animal.types';
-import {ModelViewerComponent} from '../../lib/components/hologram/hologram.component';
+import {ModelViewerComponent} from '../../lib/components/model/model.component';
 import {ToastService} from '../../lib/services/toast.service';
 
 interface IForm {
@@ -28,7 +28,7 @@ interface IForm {
 })
 export class EditComponent  implements OnInit {
 
-  public hologramUrl: string | null = null
+  public modelUrl: string | null = null
 
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly gateway: AnimalGateway = inject(AnimalGateway);
@@ -50,7 +50,7 @@ export class EditComponent  implements OnInit {
     this.animalId = this.route.snapshot.params['id'];
     if (this.animalId) {
       this.gateway.getAnimal(this.route.snapshot.params['id']).subscribe((animal: Animal) => {
-        this.hologramUrl = animal.hologram;
+        this.modelUrl = animal.model;
         this.form.patchValue({
           name: animal.name,
           weight: animal.weight,

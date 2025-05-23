@@ -7,17 +7,17 @@
     </div>
   } @else {
     <app-output-table
-      (onShowHologramClick)="showHologramModal($event)"
+      (onShowModelClick)="showModelModal($event)"
       (onDeleteAnimalClicked)="deleteAnimal($event)"
       [data]="animals.value()"></app-output-table>
   }
 
-  @if(hologramUrl){
+  @if(modelUrl){
     <app-modal
       title="Modell"
-      (close)="hideHologramModal()"
+      (close)="hideModelModal()"
     >
-      <app-hologram [path]="hologramUrl" [width]="500" [height]="500"/>
+      <app-model [path]="modelUrl" [width]="500" [height]="500"/>
     </app-modal>
   }
   @if(animalToDelete){

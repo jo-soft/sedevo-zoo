@@ -6,7 +6,7 @@ import {OutputTableComponent} from '../../lib/components/output-table/output-tab
 import {RouterLink} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 import {ModalComponent} from '../../lib/components/modal/modal.component';
-import {ModelViewerComponent} from '../../lib/components/hologram/hologram.component';
+import {ModelViewerComponent} from '../../lib/components/model/model.component';
 import {LoadingSpinnerComponent} from '../../lib/components/loading-spinner/loading-spinner.component';
 import {ToastService} from '../../lib/services/toast.service';
 
@@ -27,7 +27,7 @@ export class OverviewComponent {
   private readonly gateway: AnimalGateway = inject(AnimalGateway)
   private readonly toast: ToastService = inject(ToastService)
 
-  public hologramUrl: string | null = null
+  public modelUrl: string | null = null
   public animalToDelete: Animal | null = null
 
   public readonly animals: ResourceRef<Animal[]> = rxResource<Animal[], void>({
@@ -39,12 +39,12 @@ export class OverviewComponent {
     this.animalToDelete = animal;
   }
 
-  public showHologramModal(animal:Animal): void {
-    this.hologramUrl = animal.hologram;
+  public showModelModal(animal:Animal): void {
+    this.modelUrl = animal.model;
   }
 
-  public hideHologramModal(): void {
-    this.hologramUrl = null;
+  public hideModelModal(): void {
+    this.modelUrl = null;
   }
 
   public async onDeleteConfirmClosed(closed: boolean): Promise<void> {

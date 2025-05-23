@@ -27,7 +27,7 @@ class AnimalView(viewsets.ModelViewSet):
 
 
         animal_data = AnimalSerializer(animal).data
-        animal_data['hologram'] = file_obj
+        animal_data['model'] = file_obj
         serializer = AnimalSerializer(instance=animal, data=animal_data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

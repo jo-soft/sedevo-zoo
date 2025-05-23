@@ -6,11 +6,11 @@
       "/api": ""
     }
   },
-  "/hologram/**": {
-    "target": "http://localhost:8000/hologram",
+  "/model/**": {
+    "target": "http://localhost:8000/model",
     "secure": false,
     "pathRewrite": {
-      "/hologram": ""
+      "/model": ""
     }
   }
 }

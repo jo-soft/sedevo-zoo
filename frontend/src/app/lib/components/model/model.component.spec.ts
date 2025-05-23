@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HologramComponent } from './hologram.component';
+import { ModelComponent } from './model.component';
 
-describe('HologramComponent', () => {
-  let component: HologramComponent;
-  let fixture: ComponentFixture<HologramComponent>;
+describe('ModelComponent', () => {
+  let component: ModelComponent;
+  let fixture: ComponentFixture<ModelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HologramComponent]
+      imports: [ModelComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(HologramComponent);
+    fixture = TestBed.createComponent(ModelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

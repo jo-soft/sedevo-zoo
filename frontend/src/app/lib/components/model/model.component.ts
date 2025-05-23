@@ -4,9 +4,9 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {GLTF, GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 
 @Component({
-  selector: 'app-hologram',
-  templateUrl: './hologram.component.html',
-  styleUrl: './hologram.component.css'
+  selector: 'app-model',
+  templateUrl: './model.component.html',
+  styleUrl: './model.component.css'
 })
 export class ModelViewerComponent implements AfterViewInit {
 

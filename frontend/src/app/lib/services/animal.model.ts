@@ -7,7 +7,7 @@ export class Animal{
   public readonly weight: number;
   public readonly extinctSince: number;
   public readonly superPower: string;
-  public readonly hologram: string | null;
+  public readonly model: string | null;
 
   public constructor(
     data: IAnimal
@@ -17,7 +17,7 @@ export class Animal{
     this.weight = data.weight;
     this.extinctSince = data.extinct_since;
     this.superPower = data.super_power;
-    this.hologram = data.hologram;
+    this.model = data.model;
   }
 
 }
