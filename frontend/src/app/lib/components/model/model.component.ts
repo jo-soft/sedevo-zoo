@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, ViewChild} from '@angular/core';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {GLTF, GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
@@ -11,8 +11,8 @@ import {GLTF, GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 export class ModelViewerComponent implements AfterViewInit {
 
   @Input({ required: true}) public path!: string;
-  @Input() public width: number = 300;
-  @Input() public height: number = 300;
+  @Input() public width = 300;
+  @Input() public height = 300;
   public errorMsg: string | null = null;
 
   @ViewChild('rendererContainer', { static: true }) private rendererContainer!: ElementRef;

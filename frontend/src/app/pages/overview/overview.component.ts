@@ -1,8 +1,7 @@
 import {Component, inject, ResourceLoaderParams, ResourceRef, signal, Signal, WritableSignal} from '@angular/core';
 import {AnimalGateway} from '../../lib/services/animal.gateway';
 import {Animal} from '../../lib/services/animal.model';
-import {rxResource, RxResourceOptions, toSignal} from '@angular/core/rxjs-interop';
-import {RouterLink} from '@angular/router';
+import {rxResource, toSignal} from '@angular/core/rxjs-interop';import {RouterLink} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 import {ModalComponent} from '../../lib/components/modal/modal.component';
 import {ModelViewerComponent} from '../../lib/components/model/model.component';
@@ -45,7 +44,7 @@ export class OverviewComponent {
   public modelUrl: string | null = null
   public animalToDelete: Animal | null = null
 
-  public searchForm: FormGroup<IForm> = new FormGroup(
+  public searchForm = new FormGroup<IForm>(
     {
       name: new FormControl<string | null>(null),
       weight: new FormControl<number | null>(null),
@@ -110,6 +109,4 @@ export class OverviewComponent {
     this.animalToDelete = null;
 
   }
-
-  protected readonly eval = eval;
 }

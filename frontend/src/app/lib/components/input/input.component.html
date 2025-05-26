@@ -18,7 +18,7 @@
                 [accept]="accept"
                 [name]="formControlName"
                 [formControl]="formControl"
-                (change)="change.emit($event)"
+                (change)="fileChange.emit($event)"
         />
     } @else {
         <input

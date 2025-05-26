@@ -77,7 +77,7 @@
   @if(modelUrl){
     <app-modal
       title="Modell"
-      (close)="hideModelModal()"
+      (modalClose)="hideModelModal()"
     >
       <app-model [path]="modelUrl" [width]="500" [height]="500"/>
     </app-modal>
@@ -85,7 +85,7 @@
   @if(animalToDelete){
     <app-modal
       title="Tier Löschen"
-      (close)="onDeleteConfirmClosed($event)"
+      (modalClose)="onDeleteConfirmClosed($event)"
       closeText="Löschen"
       dismissText="Abbrechen"
     >

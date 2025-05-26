@@ -30,15 +30,15 @@ type TOnChangeFn = Parameters<ControlValueAccessor['registerOnChange']>
 })
 export class InputComponent implements ControlValueAccessor{
 
-  @Input() public label: string = '';
-  @Input() public type: string = 'text';
-  @Input() public accept: string = '*';
+  @Input() public label = '';
+  @Input() public type = 'text';
+  @Input() public accept = '*';
   @Input({ required: true }) public formControlName!: string
   @Input() public validationMessages: TInputValidationErrorMessages | null = null;
 
   @ViewChild(FormControlDirective, {static: false}) formControlDirective: FormControlDirective | null = null;
 
-  @Output() change: EventEmitter<Event> = new EventEmitter<Event>();
+  @Output() fileChange: EventEmitter<Event> = new EventEmitter<Event>();
 
   public get errorMessage(): string | null {
     if (!this.formControl.errors || !this.validationMessages) {

@@ -3,7 +3,7 @@
     @if(title){
       <h2>{{ title }}</h2>
     }
-    <button (click)="close.emit()">X</button>
+    <button (click)="modalClose.emit()">X</button>
   </div>
   <div class="modal-content">
     <div class="modal-content__inner">
@@ -12,9 +12,9 @@
   </div>
   <div class="modal-footer">
     @if(dismissText){
-      <button class="modal-cancel-btn" (click)="close.emit(false)"> {{ dismissText}}</button>
+      <button class="modal-cancel-btn" (click)="modalClose.emit(false)"> {{ dismissText}}</button>
     }
-    <button class="modal-close-btn" (click)="close.emit(true)"> {{ closeText}}</button>
+    <button class="modal-close-btn" (click)="modalClose.emit(true)"> {{ closeText}}</button>
   </div>
 </dialog>
 

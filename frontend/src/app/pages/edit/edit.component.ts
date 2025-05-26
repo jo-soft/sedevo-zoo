@@ -95,7 +95,7 @@ export class EditComponent  implements OnInit {
       this.toast.setMessage('Tier gespeichert');
       await this.router.navigate([''])
     }
-    catch (e) {
+    catch  {
       this.toast.setMessage('Ooops, da ist etwas schiefgelaufen');
     }
   }
