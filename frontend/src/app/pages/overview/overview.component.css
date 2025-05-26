@@ -6,31 +6,71 @@
   justify-content: flex-start;
 }
 
-table {
-  --color-border:  lch(from var(--color-white) calc(l - 10) c h);
+.overview-container {
+  display: flex;
+  flex-direction: column;
+}
 
+form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.table {
+  --color-border:  lch(from var(--color-white) calc(l - 10) c h);
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
   font-size: 16px;
   text-align: left;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+
+  @media screen and  (max-width: 960px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 }
 
-thead tr {
+.table-row {
+  grid-column: span 5;
+  display: grid;
+  grid-template-columns: subgrid;
+  padding: 12px 15px;
+  align-items: center;
+}
+
+.thead .table-row {
   background-color: var(--color-white);
   border-bottom: 2px solid var(--color-border);
+  display: grid;
+  grid-template-columns: subgrid;
 }
 
-th, td {
-  padding: 12px 15px;
+.thead, .tbody {
+  grid-column: span 5;
   border: 1px solid var(--color-border);
+  grid-template-columns: subgrid;
+  display: grid;
+  column-gap: 1rem;
+
+  @media screen and  (max-width: 960px) {
+    grid-column: span 4;
+  }
 }
 
-tbody tr:nth-child(even) {
+.tbody > .table-row {
+  @media screen and  (max-width: 960px){
+    grid-column: span 4;
+    row-gap: 1rem;
+  }
+}
+
+.tbody .table-row:nth-child(even) {
   background-color: var(--color-white-off);
 }
 
-tbody tr:hover {
+.tbody .table-row:hover {
   background-color: lch(from var(--color-white-off) calc(l - 10) c h);
 }
 
@@ -40,7 +80,15 @@ p {
 
 .actions {
   display: flex;
-  gap: 1rem
+  gap: 1rem;
+
+  @media screen and  (max-width: 960px){
+    grid-column: 1 / span 4;
+  }
+
+  @media screen and  (max-width: 410px){
+    flex-direction: column;
+  }
 }
 
 

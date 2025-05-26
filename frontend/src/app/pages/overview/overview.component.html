@@ -1,66 +1,78 @@
-<div>
+<div class="overview-container">
   <h2>Inventarliste</h2>
+
+  <form [formGroup]="searchForm">
+    <app-input label="Name" type="text" formControlName="name"></app-input>
+    <app-input label="Mindestgewicht" type="number" formControlName="weight"></app-input>
+    <app-input label="Ausgestorben seit" type="number" formControlName="extinctSince"></app-input>
+  </form>
 
   @if(animals.isLoading()){
     <div class="loading">
       <app-loading-spinner></app-loading-spinner>
     </div>
   }
-  <table [hidden]="animals.isLoading()">
-        <thead>
-        <tr>
-          <th>
+  <div class="table">
+    <div class="thead">
+        <div class="table-row">
+          <div class="thead-item">
             <span>
               Name
             </span>
             <app-order-by-button field="name" (order)="nameOrder.set($event)"></app-order-by-button>
-          </th>
-          <th>
+          </div>
+          <div class="thead-item">
             <span>
               Gewicht
             </span>
             <app-order-by-button field="weight" (order)="weightOrder.set($event)"></app-order-by-button>
-          </th>
-          <th>
+          </div>
+          <div class="thead-item">
             <span>
               Superpower
             </span>
-          </th>
-          <th>
+          </div>
+          <div class="thead-item">
             <span>
               Ausgesorben seit
             </span>
             <app-order-by-button field="extinct_since" (order)="extinctSinceOrder.set($event)"></app-order-by-button>
-          </th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-          @for( animal of animals.value(); track animal.id){
-            <tr>
-              <td>{{ animal.name }}</td>
-              <td>{{ animal.weight }}</td>
-              <td>{{ animal.superPower }}</td>
-              <td>{{ animal.extinctSince }}</td>
-              <td class="actions">
-                <button
-                  class="primary-button"
-                  (click)=showModelModal(animal)
-                  [disabled]="!animal.model"
-                >Model</button>
-                <a
-                  class="secondary-button"
-                  [routerLink]="['edit', animal.id]"
-                > Bearbeiten </a>
-                <button
-                  class="secondary-button"
-                  (click)=deleteAnimal(animal)
-                >Löschen</button>
-              </td>
-            </tr>
-          }
-        </tbody>
-  </table>
+          </div>
+          <div class="thead-item"></div>
+        </div>
+    </div>
+
+    <div class="tbody">
+        @for( animal of animals.value(); track animal.id){
+          <div class="table-row">
+            <div class="trow-item">{{ animal.name }}</div>
+            <div class="trow-item">{{ animal.weight }}</div>
+            <div class="trow-item">{{ animal.superPower }}</div>
+            <div class="trow-item">{{ animal.extinctSince }}</div>
+            <div class="trow-item actions">
+              <button
+                class="primary-button"
+                (click)=showModelModal(animal)
+                [disabled]="!animal.model"
+              >Model</button>
+              <a
+                class="secondary-button"
+                [routerLink]="['edit', animal.id]"
+              > Bearbeiten </a>
+              <button
+                class="secondary-button"
+                (click)=deleteAnimal(animal)
+              >Löschen</button>
+            </div>
+          </div>
+        }
+    </div>
+  </div>
+  @if(!animals.value().length){
+    <p>
+      Dein Zoo ist noch leer. Füge Tiere hinzu!
+    </p>
+  }
 
   @if(modelUrl){
     <app-modal

@@ -60,7 +60,7 @@ a, button {
   touch-action: manipulation;
   transition: scale 0.1s linear, color 0.1s linear;
   color: var(--text-color, var(--color-primary));
-
+  text-align: center;
 
   &:disabled {
     opacity: .6;

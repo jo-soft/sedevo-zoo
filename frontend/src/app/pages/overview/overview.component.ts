@@ -1,7 +1,7 @@
 import {Component, inject, ResourceLoaderParams, ResourceRef, signal, Signal, WritableSignal} from '@angular/core';
 import {AnimalGateway} from '../../lib/services/animal.gateway';
 import {Animal} from '../../lib/services/animal.model';
-import {rxResource, RxResourceOptions} from '@angular/core/rxjs-interop';
+import {rxResource, RxResourceOptions, toSignal} from '@angular/core/rxjs-interop';
 import {RouterLink} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 import {ModalComponent} from '../../lib/components/modal/modal.component';
@@ -10,6 +10,18 @@ import {LoadingSpinnerComponent} from '../../lib/components/loading-spinner/load
 import {ToastService} from '../../lib/services/toast.service';
 import {OrderButtonComponent} from '../../lib/components/order-button/order-button.component';
 import {HttpParams} from '@angular/common/http';
+import {InputComponent} from '../../lib/components/input/input.component';
+import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+
+interface IForm {
+  name: FormControl<string | null>
+  weight: FormControl<number| null>
+  extinctSince: FormControl<number| null>
+}
+
+type TFormData = Partial<{
+  [k in keyof IForm]: IForm[k]['value']
+}>;
 
 @Component({
   selector: 'app-overview',
@@ -18,7 +30,9 @@ import {HttpParams} from '@angular/common/http';
     ModalComponent,
     ModelViewerComponent,
     LoadingSpinnerComponent,
-    OrderButtonComponent
+    OrderButtonComponent,
+    InputComponent,
+    ReactiveFormsModule
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.css'
@@ -31,17 +45,45 @@ export class OverviewComponent {
   public modelUrl: string | null = null
   public animalToDelete: Animal | null = null
 
-  public nameOrder: WritableSignal<string>  = signal<string>('')
-  public weightOrder: WritableSignal<string> = signal<string>('')
-  public extinctSinceOrder: WritableSignal<string> = signal<string>('')
+  public searchForm: FormGroup<IForm> = new FormGroup(
+    {
+      name: new FormControl<string | null>(null),
+      weight: new FormControl<number | null>(null),
+      extinctSince: new FormControl<number | null>(null)
+    }
+  )
+
+  public readonly nameOrder: WritableSignal<string>  = signal<string>('')
+  public readonly weightOrder: WritableSignal<string> = signal<string>('')
+  public readonly extinctSinceOrder: WritableSignal<string> = signal<string>('')
+  public readonly formData: Signal<TFormData | undefined> = toSignal(this.searchForm.valueChanges);
 
   public readonly animals: ResourceRef<Animal[]> = rxResource<Animal[], HttpParams>({
     defaultValue: [],
-    request: () =>
-      new HttpParams()
+    request: () => {
+      let params: HttpParams = new HttpParams()
         .append('order[]', this.nameOrder())
         .append('order[]', this.weightOrder())
-        .append('order[]', this.extinctSinceOrder()),
+        .append('order[]', this.extinctSinceOrder())
+
+      const name: string | null = this.formData()?.name ?? null;
+      const weight: number | null = this.formData()?.weight ?? null;
+      const extinctSince: number | null = this.formData()?.extinctSince ?? null;
+
+        if (name) {
+          params = params.append('name', name)
+        }
+
+        if(weight) {
+          params = params.append('weight', weight)
+        }
+
+        if (extinctSince)  {
+          params = params.append('extinct_since', extinctSince)
+        }
+
+      return params;
+    },
     loader: (params: ResourceLoaderParams<HttpParams> ) =>
       this.gateway.getAnimals(params.request)
   })

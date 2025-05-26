@@ -21,8 +21,8 @@ class AnimalView(viewsets.ModelViewSet):
 
         qs = qs.filter(
             Q(name__icontains=params.get("name", "")),
-            Q(weight__gte=params.get("weight_gte", 0)),
-            Q(extinct_since__gte=params.get("extinct_since_gte", 0)),
+            Q(weight__gte=params.get("weight", 0)),
+            Q(extinct_since__gte=params.get("extinct_since", 0)),
         )
 
         if (orders):
