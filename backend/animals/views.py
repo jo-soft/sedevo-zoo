@@ -2,7 +2,7 @@ from django.core.exceptions import FieldError
 from django.db.models import Q
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-from rest_framework.parsers import FileUploadParser
+from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework import  viewsets
 
@@ -34,11 +34,10 @@ class AnimalView(viewsets.ModelViewSet):
 
 
 
-
     @action(
         detail=True,
         methods=["POST"],
-        parser_classes=[FileUploadParser],
+        parser_classes=[MultiPartParser],
     )
     def upload(self, request, **_kwargs):
         animal = self.get_object()
@@ -46,8 +45,8 @@ class AnimalView(viewsets.ModelViewSet):
         file_obj = request.data["file"]
 
         if not file_obj:
-            raise ValidationError("No file provided.")
 
+            raise ValidationError("No file provided.")
 
         animal_data = AnimalSerializer(animal).data
         animal_data['model'] = file_obj

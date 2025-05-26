@@ -1,1 +1,8 @@
-<div class="wrapper" #rendererContainer></div>
+@if(errorMsg) {
+  <div>
+    <p>
+      {{ errorMsg }}
+    </p>
+  </div>
+}
+<div [hidden]="errorMsg" class="wrapper" #rendererContainer></div>

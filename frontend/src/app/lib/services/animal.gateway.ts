@@ -51,13 +51,13 @@ export class AnimalGateway {
   }
 
   public uploadFile(id: number, file: File): Observable<Animal> {
+
+    const fd: FormData = new FormData();
+    fd.append('file', file);
+
     return this.httpClient.post<IAnimal>(
       `/api/animals/animal/${id}/upload/`,
-      {file},
-      {headers: new HttpHeaders({
-          'content-type': file.type,
-          'Content-Disposition': `attachment; filename="${file.name}"`
-      })}
+      fd
     ).pipe(
       map(
         (animal: IAnimal) => new Animal(animal)

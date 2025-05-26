@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {GLTF, GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
@@ -15,19 +15,8 @@ export class ModelViewerComponent implements AfterViewInit {
   @Input() public height: number = 300;
   public errorMsg: string | null = null;
 
-
   @ViewChild('rendererContainer', { static: true }) private rendererContainer!: ElementRef;
   private scene!: THREE.Scene;
-  private camera!: THREE.PerspectiveCamera;
-  private renderer!: THREE.WebGLRenderer;
-  private controls!: OrbitControls;
-  private loader: GLTFLoader;
-
-
-  public constructor () {
-    this.loader = new GLTFLoader()
-
-  }
 
   public ngAfterViewInit(): void {
     this.initThree();
@@ -37,37 +26,47 @@ export class ModelViewerComponent implements AfterViewInit {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xFAFAFA)
 
-    // Initialize camera
-    this.camera = new THREE.PerspectiveCamera();
-    this.camera.position.set(3, 3, 1);
 
-    // Initialize renderer
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
-    this.renderer.setSize(this.width, this.height);
-    this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
 
-    // Initialize OrbitControls
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.addEventListener('change', () => {
-      this.renderer.render(this.scene, this.camera);
+    const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera();
+
+    const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(this.width, this.height);
+    this.rendererContainer.nativeElement.appendChild(renderer.domElement);
+
+    const controls: OrbitControls = new OrbitControls(camera, renderer.domElement);
+    controls.addEventListener('change', () => {
+      renderer.render(this.scene, camera);
     });
-    this.controls.enableZoom = true
-    this.controls.update();
+    controls.enableZoom = true
+    controls.update();
 
-    this.loader.load(this.path, (gltf: GLTF) => {
+    new GLTFLoader()
+    .load(this.path, (gltf: GLTF) => {
       const model = gltf.scene;
       model.position.set(0, 0, 0);
       this.scene.add(model);
 
-      // Add ambient light
+      // ensure model is always visible
+      const box: THREE.Box3 = new THREE.Box3().setFromObject(model);
+      const size: number = box.getSize(new THREE.Vector3()).length();
+      const center: THREE.Vector3 = box.getCenter(new THREE.Vector3());
+
+      const distance: number = size / 2 / Math.tan(camera.fov * Math.PI / 360);
+
+      camera.position.set(distance / 2, distance / 2, distance);
+      camera.lookAt(center);
+
+      const axesHelper: THREE.AxesHelper = new THREE.AxesHelper( 15 );
+      this.scene.add( axesHelper );
+
       const ambientLight = new THREE.AmbientLight(0xFAFAFA);
       this.scene.add(ambientLight);
 
-      // Start the animation loop
       const animate = () => {
         requestAnimationFrame(animate);
-        this.controls.update();
-        this.renderer.render(this.scene, this.camera);
+        controls.update();
+        renderer.render(this.scene, camera);
       };
       animate();
 
@@ -75,6 +74,5 @@ export class ModelViewerComponent implements AfterViewInit {
       this.errorMsg = `${error}`;
     });
   }
-
 
 }
