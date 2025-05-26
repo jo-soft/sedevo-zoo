@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from .views import  AnimalView
+from .views import AnimalView
 
 from rest_framework.routers import DefaultRouter
 

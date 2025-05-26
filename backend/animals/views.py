@@ -4,10 +4,11 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
-from rest_framework import  viewsets
+from rest_framework import viewsets
 
 from .models import Animal
 from .serializers import AnimalSerializer
+
 
 class AnimalView(viewsets.ModelViewSet):
     queryset = Animal.objects.all()
@@ -31,8 +32,6 @@ class AnimalView(viewsets.ModelViewSet):
             except FieldError:
                 pass
         return qs
-
-
 
     @action(
         detail=True,

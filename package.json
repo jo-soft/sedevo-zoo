@@ -1,5 +1,11 @@
 {
   "dependencies": {
     "@angular/cli": "^19.2.12"
+  },
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
   }
 }

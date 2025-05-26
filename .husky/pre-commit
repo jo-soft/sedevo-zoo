@@ -1,0 +1,2 @@
+cd frontend && npm run lint; cd ..
+cd backend && . venv/bin/activate && autopep8 -ir --exclude venv .

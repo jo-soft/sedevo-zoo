@@ -19,7 +19,8 @@ class Migration(migrations.Migration):
                 ('weight', models.FloatField()),
                 ('extinct_since', models.IntegerField()),
                 ('model', models.FileField(null=True, upload_to='model/')),
-                ('super_power', models.CharField(blank=True, default='', max_length=100)),
+                ('super_power', models.CharField(
+                    blank=True, default='', max_length=100)),
             ],
         ),
     ]
