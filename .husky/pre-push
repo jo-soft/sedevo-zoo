@@ -1,0 +1,2 @@
+cd frontend && ng test --watch=false; cd ..
+cd backend && . venv/bin/activate && ./manage.py test; cd ..
