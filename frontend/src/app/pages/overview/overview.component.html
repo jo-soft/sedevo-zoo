@@ -79,13 +79,13 @@
       title="Modell"
       (modalClose)="hideModelModal()"
     >
-      <app-model [path]="modelUrl" [width]="500" [height]="500"/>
+      <app-model-viewer [path]="modelUrl" [width]="500" [height]="500"/>
     </app-modal>
   }
   @if(animalToDelete){
     <app-modal
       title="Tier Löschen"
-      (modalClose)="onDeleteConfirmClosed($event)"
+      (modalClose)="onDeleteClosed($event)"
       closeText="Löschen"
       dismissText="Abbrechen"
     >

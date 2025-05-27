@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import { LoadingService } from './loading.service';
-import {finalize, Observable} from 'rxjs';
+import {throwError, catchError, finalize, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +17,13 @@ export class LoadingInterceptor   implements HttpInterceptor {
     this.loadingService.setLoading();
 
     return next.handle(req).pipe(
-      finalize(() => {
-        this.loadingService.unsetLoading();
-      })
+      catchError(
+        (error) => {
+          this.loadingService.unsetLoading();
+          return throwError(error);
+        }
+      ),
+      finalize(() => this.loadingService.unsetLoading()),
     );
   }
 }

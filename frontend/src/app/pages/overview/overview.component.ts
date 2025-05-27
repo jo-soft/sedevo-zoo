@@ -2,9 +2,9 @@ import {Component, inject, ResourceLoaderParams, ResourceRef, signal, Signal, Wr
 import {AnimalGateway} from '../../lib/services/animal.gateway';
 import {Animal} from '../../lib/services/animal.model';
 import {rxResource, toSignal} from '@angular/core/rxjs-interop';import {RouterLink} from '@angular/router';
-import {firstValueFrom} from 'rxjs';
+import {debounceTime, firstValueFrom} from 'rxjs';
 import {ModalComponent} from '../../lib/components/modal/modal.component';
-import {ModelViewerComponent} from '../../lib/components/model/model.component';
+import {ModelViewerComponent} from '../../lib/components/model-viewer/model-viewer.component';
 import {LoadingSpinnerComponent} from '../../lib/components/loading-spinner/loading-spinner.component';
 import {ToastService} from '../../lib/services/toast.service';
 import {OrderButtonComponent} from '../../lib/components/order-button/order-button.component';
@@ -55,15 +55,24 @@ export class OverviewComponent {
   public readonly nameOrder: WritableSignal<string>  = signal<string>('')
   public readonly weightOrder: WritableSignal<string> = signal<string>('')
   public readonly extinctSinceOrder: WritableSignal<string> = signal<string>('')
-  public readonly formData: Signal<TFormData | undefined> = toSignal(this.searchForm.valueChanges);
+  public readonly formData: Signal<TFormData | undefined> = toSignal(
+    this.searchForm.valueChanges.pipe(debounceTime(300))
+  );
 
   public readonly animals: ResourceRef<Animal[]> = rxResource<Animal[], HttpParams>({
     defaultValue: [],
     request: () => {
-      let params: HttpParams = new HttpParams()
-        .append('order[]', this.nameOrder())
-        .append('order[]', this.weightOrder())
-        .append('order[]', this.extinctSinceOrder())
+      let params: HttpParams = new HttpParams();
+
+      if(this.nameOrder()){
+        params = params.append('order[]', this.nameOrder())
+      }
+      if(this.weightOrder()){
+          params = params.append('order[]', this.weightOrder())
+      }
+      if(this.extinctSinceOrder()){
+          params = params.append('order[]', this.extinctSinceOrder())
+      }
 
       const name: string | null = this.formData()?.name ?? null;
       const weight: number | null = this.formData()?.weight ?? null;
@@ -87,10 +96,6 @@ export class OverviewComponent {
       this.gateway.getAnimals(params.request)
   })
 
-  public async deleteAnimal(animal: Animal): Promise<void> {
-    this.animalToDelete = animal;
-  }
-
   public showModelModal(animal:Animal): void {
     this.modelUrl = animal.model;
   }
@@ -99,12 +104,21 @@ export class OverviewComponent {
     this.modelUrl = null;
   }
 
-  public async onDeleteConfirmClosed(closed: boolean): Promise<void> {
+  public async deleteAnimal(animal: Animal): Promise<void> {
+    this.animalToDelete = animal;
+  }
+
+  public async onDeleteClosed(closed: boolean): Promise<void> {
 
     if(closed) {
-      await firstValueFrom(this.gateway.deleteAnimal(this.animalToDelete!.id));
-      this.animals.reload()
-      this.toast.setMessage('Tier gelöscht');
+      try {
+        await firstValueFrom(this.gateway.deleteAnimal(this.animalToDelete!.id));
+        this.animals.reload()
+        this.toast.setMessage('Tier gelöscht');
+      }
+      catch {
+        this.toast.setMessage('Oops, da ist etwas schief gelaufen');
+      }
     }
     this.animalToDelete = null;
 

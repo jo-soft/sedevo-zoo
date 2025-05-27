@@ -6,7 +6,7 @@ import {AnimalGateway} from '../../lib/services/animal.gateway';
 import {ActivatedRoute, Router} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 import {TAnimalPayload} from '../../lib/services/animal.types';
-import {ModelViewerComponent} from '../../lib/components/model/model.component';
+import {ModelViewerComponent} from '../../lib/components/model-viewer/model-viewer.component';
 import {ToastService} from '../../lib/services/toast.service';
 
 interface IForm {
@@ -95,7 +95,7 @@ export class EditComponent  implements OnInit {
       this.toast.setMessage('Tier gespeichert');
       await this.router.navigate([''])
     }
-    catch  {
+    catch {
       this.toast.setMessage('Ooops, da ist etwas schiefgelaufen');
     }
   }

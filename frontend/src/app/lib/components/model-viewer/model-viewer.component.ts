@@ -4,9 +4,9 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {GLTF, GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 
 @Component({
-  selector: 'app-model',
-  templateUrl: './model.component.html',
-  styleUrl: './model.component.css'
+  selector: 'app-model-viewer',
+  templateUrl: './model-viewer.component.html',
+  styleUrl: './model-viewer.component.css'
 })
 export class ModelViewerComponent implements AfterViewInit {
 
@@ -19,14 +19,14 @@ export class ModelViewerComponent implements AfterViewInit {
   private scene!: THREE.Scene;
 
   public ngAfterViewInit(): void {
-    this.initThree();
+    if(this.path) {
+      this.initThree();
+    }
   }
 
   private initThree() {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xFAFAFA)
-
-
 
     const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera();
 
@@ -47,7 +47,7 @@ export class ModelViewerComponent implements AfterViewInit {
       model.position.set(0, 0, 0);
       this.scene.add(model);
 
-      // ensure model is always visible
+      // ensure model-viewer is always visible
       const box: THREE.Box3 = new THREE.Box3().setFromObject(model);
       const size: number = box.getSize(new THREE.Vector3()).length();
       const center: THREE.Vector3 = box.getCenter(new THREE.Vector3());
