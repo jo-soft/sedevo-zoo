@@ -3,7 +3,8 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
-import {LoadingInterceptor} from './lib/services/loading-interceptor.service';
+import {LoadingInterceptor} from './lib/services/loading/loading-interceptor.service';
+import {WebSocketProvider} from './lib/services/websocket/websockets.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,5 +18,6 @@ export const appConfig: ApplicationConfig = {
       useClass: LoadingInterceptor,
       multi: true,
     },
+    WebSocketProvider
   ],
 };

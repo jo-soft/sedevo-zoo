@@ -1,21 +1,28 @@
 import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import { OverviewComponent } from './overview.component';
-import { AnimalGateway } from '../../lib/services/animal.gateway';
-import { ToastService } from '../../lib/services/toast.service';
+import { AnimalsGateway } from '../../lib/services/animals/animals.gateway';
+import { ToastService } from '../../lib/services/toast/toast.service';
 import { provideRouter } from '@angular/router';
-import {of, throwError} from 'rxjs';
+import {of, Subject, throwError} from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
 import {HttpParams} from '@angular/common/http';
-import {Animal} from '../../lib/services/animal.model';
+import {Animal} from '../../lib/services/animals/animal.model';
 import {By} from '@angular/platform-browser';
 import {ModalComponent} from '../../lib/components/modal/modal.component';
 import {ModelViewerComponent} from '../../lib/components/model-viewer/model-viewer.component';
+import {WebSocketService} from '../../lib/services/websocket/websockets.service';
+import {IWebsocketMessage} from '../../lib/services/websocket/websockets.types';
+import {AnimalWebsocketMessageTypeEnum, IAnimal} from '../../lib/services/animals/animals.types';
 
 describe('OverviewComponent', () => {
   let component: OverviewComponent;
   let fixture: ComponentFixture<OverviewComponent>;
-  let animalGatewayMock: jasmine.SpyObj<AnimalGateway>;
+  let animalGatewayMock: jasmine.SpyObj<AnimalsGateway>;
   let toastServiceMock: jasmine.SpyObj<ToastService>;
+  let webSocketServiceMock: jasmine.SpyObj<WebSocketService>;
+
+  let websocketDeleteStream: Subject<IWebsocketMessage<number, AnimalWebsocketMessageTypeEnum.Deleted>>
+  let websocketUpdateCreateStream: Subject<IWebsocketMessage<IAnimal, AnimalWebsocketMessageTypeEnum.Created | AnimalWebsocketMessageTypeEnum.Updated>>;
 
   let animals: Animal[];
 
@@ -38,16 +45,26 @@ describe('OverviewComponent', () => {
         super_power: 'Stealth',
       }),
     ]
-    animalGatewayMock = jasmine.createSpyObj<AnimalGateway>('AnimalGateway', ['getAnimals', 'deleteAnimal']);
+
+    websocketDeleteStream = new Subject<IWebsocketMessage<number, AnimalWebsocketMessageTypeEnum.Deleted>>();
+    websocketUpdateCreateStream = new Subject<IWebsocketMessage<IAnimal, AnimalWebsocketMessageTypeEnum.Created | AnimalWebsocketMessageTypeEnum.Updated>>();
+
+    animalGatewayMock = jasmine.createSpyObj<AnimalsGateway>('AnimalsGateway', ['getAnimals', 'deleteAnimal']);
     animalGatewayMock.getAnimals.and.returnValue(of(animals));
     toastServiceMock = jasmine.createSpyObj<ToastService>('ToastService', ['setMessage']);
+
+    webSocketServiceMock = jasmine.createSpyObj<WebSocketService>('WebSocketService', ['subscribe']);
+    webSocketServiceMock.subscribe.withArgs([AnimalWebsocketMessageTypeEnum.Deleted]).and.returnValue(websocketDeleteStream);
+    webSocketServiceMock.subscribe.withArgs([AnimalWebsocketMessageTypeEnum.Updated, AnimalWebsocketMessageTypeEnum.Created])
+      .and.returnValue(websocketUpdateCreateStream);
 
     await TestBed.configureTestingModule({
       imports: [OverviewComponent, ReactiveFormsModule],
       providers: [
         provideRouter([]),
-        {provide: AnimalGateway, useValue: animalGatewayMock},
+        {provide: AnimalsGateway, useValue: animalGatewayMock},
         {provide: ToastService, useValue: toastServiceMock},
+        {provide: WebSocketService, useValue: webSocketServiceMock},
       ],
     }).compileComponents();
 
@@ -59,6 +76,102 @@ describe('OverviewComponent', () => {
   it('should create', () => {
     expect(component).toBeInstanceOf(OverviewComponent)
   });
+
+  describe('constructor', () => {
+
+    let setAnimalsSpy: jasmine.Spy;
+
+    beforeEach(
+      () => {
+        setAnimalsSpy = spyOn(component.animals, 'set').and.callThrough();
+      }
+    )
+
+    describe('WebSocket Created Event', () => {
+
+      let message: IWebsocketMessage<IAnimal, AnimalWebsocketMessageTypeEnum.Created>;
+      let newAnimal: Animal;
+
+      beforeEach(() => {
+        message = {
+          type: AnimalWebsocketMessageTypeEnum.Created,
+          data: { id: 3, name: 'Elephant', weight: 500, extinct_since: 231, model: '', super_power: 'Strength' },
+        };
+        newAnimal = new Animal(message.data);
+      })
+
+      it('should add the new animal to the list', () => {
+        websocketUpdateCreateStream.next(message);
+
+        expect(component.animals.value()).toEqual([
+          ...animals,
+          newAnimal,
+        ]);
+      });
+
+      it('should display a toast message indicating external update', () => {
+        websocketUpdateCreateStream.next(message);
+
+        expect(toastServiceMock.setMessage).toHaveBeenCalledOnceWith('Tiere wureden extern aktualisiert');
+        expect(setAnimalsSpy).toHaveBeenCalledBefore(toastServiceMock.setMessage);
+      });
+    });
+
+    describe('WebSocket Deleted Event', () => {
+      let message: IWebsocketMessage<number, AnimalWebsocketMessageTypeEnum.Deleted>;
+
+      beforeEach(() => {
+        message = {
+          type: AnimalWebsocketMessageTypeEnum.Deleted,
+          data: 1, // id of Lion
+        };
+      });
+
+      it('should remove the animal from the list', () => {
+        websocketDeleteStream.next(message);
+
+        expect(component.animals.value()).toEqual([
+          animals[1]
+        ]);
+      });
+
+      it('should display a toast message indicating external update', () => {
+        websocketDeleteStream.next(message);
+
+        expect(toastServiceMock.setMessage).toHaveBeenCalledOnceWith('Tiere wureden extern aktualisiert');
+        expect(setAnimalsSpy).toHaveBeenCalledBefore(toastServiceMock.setMessage);
+      });
+    });
+
+    describe('WebSocket Updated Event', () => {
+      let message: IWebsocketMessage<IAnimal, AnimalWebsocketMessageTypeEnum.Updated>;
+      let updatedAnimal: Animal;
+
+      beforeEach(() => {
+        message = {
+          type: AnimalWebsocketMessageTypeEnum.Updated,
+          data: { id: 2, name: 'Tiger', weight: 250, extinct_since: 199, model: '', super_power: 'Growl' },
+        };
+        updatedAnimal = new Animal(message.data);
+      });
+
+      it('should update the animal in the list', fakeAsync(() => {
+        websocketUpdateCreateStream.next(message);
+        expect(component.animals.value()).toEqual([
+          animals[0], // Lion remains unchanged
+          updatedAnimal,
+        ]);
+      }));
+
+      it('should display a toast message indicating external update', () => {
+        websocketUpdateCreateStream.next(message);
+
+        expect(toastServiceMock.setMessage).toHaveBeenCalledOnceWith('Tiere wureden extern aktualisiert');
+        expect(setAnimalsSpy).toHaveBeenCalledBefore(toastServiceMock.setMessage);
+      });
+    });
+
+  })
 
   describe('if showModelModal is called', () => {
 

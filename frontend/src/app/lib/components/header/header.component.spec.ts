@@ -1,8 +1,8 @@
 import {ComponentFixture, TestBed, fakeAsync, tick} from '@angular/core/testing';
 import { HeaderComponent } from './header.component';
 import { provideRouter } from '@angular/router';
-import { LoadingService } from '../../services/loading.service';
-import { ToastService } from '../../services/toast.service';
+import { LoadingService } from '../../services/loading/loading.service';
+import { ToastService } from '../../services/toast/toast.service';
 import { of, Subject } from 'rxjs';
 import { By } from '@angular/platform-browser';
 

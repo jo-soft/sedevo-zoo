@@ -1,5 +1,5 @@
 import { Animal } from './animal.model';
-import {IAnimal} from './animal.types';
+import {IAnimal} from './animals.types';
 
 describe('Animal Model', () => {
 

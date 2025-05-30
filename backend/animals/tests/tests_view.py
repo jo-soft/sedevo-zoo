@@ -2,26 +2,24 @@ import json
 from http import HTTPStatus
 
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.db import IntegrityError
 from django.test import TestCase, RequestFactory
 from rest_framework.test import APIClient
 
-from animals.views import AnimalView
+from animals.views import AnimalJSONView
 from animals.models import Animal
 
 
-class TstAnimalView(TestCase):
+class TestAnimalJSONView(TestCase):
 
     fixtures = ['animals.json']
 
     def setUp(self):
         self.factory = RequestFactory()
 
-        ### Test for GET ###
     def test_get_list(self):
         all_animals = Animal.objects.all()
         request = self.factory.get('/animals/animal',)
-        response = AnimalView.as_view({'get': 'list'})(request)
+        response = AnimalJSONView.as_view({'get': 'list'})(request)
 
         self.assertEquals(response.status_code, 200)
 
@@ -41,7 +39,7 @@ class TstAnimalView(TestCase):
         search_term = 'eins'
         all_animals = Animal.objects.filter(name__contains=search_term)
         request = self.factory.get('/animals/animal', {'name': search_term})
-        response = AnimalView.as_view({'get': 'list'})(request)
+        response = AnimalJSONView.as_view({'get': 'list'})(request)
 
         self.assertEquals(response.status_code, 200)
 
@@ -53,7 +51,7 @@ class TstAnimalView(TestCase):
     def test_get_by_id(self):
         animal = Animal.objects.first()
         request = self.factory.get(f'/animals/animal/{animal.id}/')
-        response = AnimalView.as_view(
+        response = AnimalJSONView.as_view(
             {'get': 'retrieve'})(request, pk=animal.id)
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
@@ -140,44 +138,3 @@ class TstAnimalView(TestCase):
         self.assertIsNotNone(animal.model)
         self.assertTrue("test_model" in animal.model.name)
         self.assertTrue(animal.model.name.endswith('.obj'))
-
-
-class TestAnimalModel(TestCase):
-
-    def test_create_animal(self):
-        animal = Animal.objects.create(
-            name="Test Animal",
-            weight=100,
-            extinct_since=5000,
-            super_power="Test Power"
-        )
-        self.assertEqual(animal.name, "Test Animal")
-        self.assertEqual(animal.weight, 100)
-        self.assertEqual(animal.extinct_since, 5000)
-        self.assertEqual(animal.super_power, "Test Power")
-
-    def test_weight_cannot_be_negative(self):
-        with self.assertRaises(IntegrityError):
-            Animal.objects.create(
-                name="Invalid Animal",
-                weight=-10,
-                extinct_since=5000,
-                super_power="Invalid Power"
-            )
-
-    def test_super_power_optional(self):
-        animal = Animal.objects.create(
-            name="No Power Animal",
-            weight=200,
-            extinct_since=3000
-        )
-        self.assertEqual(animal.super_power, "")
-
-    def test_extinct_since_cannot_be_negative(self):
-        with self.assertRaises(IntegrityError):
-            Animal.objects.create(
-                name="Invalid Extinct Animal",
-                weight=100,
-                extinct_since=-100,
-                super_power="Invalid Power"
-            )

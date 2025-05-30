@@ -1,3 +1,4 @@
+from asgiref.sync import async_to_sync
 from django.core.exceptions import FieldError
 from django.db.models import Q
 from rest_framework.decorators import action
@@ -5,12 +6,16 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework import viewsets
+from channels.generic.websocket import JsonWebsocketConsumer
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 from .models import Animal
 from .serializers import AnimalSerializer
 
 
-class AnimalView(viewsets.ModelViewSet):
+class AnimalJSONView(viewsets.ModelViewSet):
     queryset = Animal.objects.all()
     serializer_class = AnimalSerializer
 

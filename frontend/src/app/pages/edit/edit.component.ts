@@ -1,13 +1,13 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Animal} from '../../lib/services/animal.model';
+import {Animal} from '../../lib/services/animals/animal.model';
 import {InputComponent} from '../../lib/components/input/input.component';
-import {AnimalGateway} from '../../lib/services/animal.gateway';
+import {AnimalsGateway} from '../../lib/services/animals/animals.gateway';
 import {ActivatedRoute, Router} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
-import {TAnimalPayload} from '../../lib/services/animal.types';
+import {TAnimalPayload} from '../../lib/services/animals/animals.types';
 import {ModelViewerComponent} from '../../lib/components/model-viewer/model-viewer.component';
-import {ToastService} from '../../lib/services/toast.service';
+import {ToastService} from '../../lib/services/toast/toast.service';
 
 interface IForm {
   name: FormControl<string | null>
@@ -31,7 +31,7 @@ export class EditComponent  implements OnInit {
   public modelUrl: string | null = null
 
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
-  private readonly gateway: AnimalGateway = inject(AnimalGateway);
+  private readonly gateway: AnimalsGateway = inject(AnimalsGateway);
   private readonly toast: ToastService = inject(ToastService)
   private readonly router: Router = inject(Router);
 

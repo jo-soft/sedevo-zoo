@@ -1,4 +1,4 @@
-import {IAnimal} from './animal.types';
+import {IAnimal} from './animals.types';
 
 export class Animal{
 

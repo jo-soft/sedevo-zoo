@@ -8,3 +8,9 @@ export interface IAnimal {
 }
 
 export type TAnimalPayload =  Omit<IAnimal, 'model' | 'id'>
+
+export enum AnimalWebsocketMessageTypeEnum {
+  Created = 'animal.created',
+  Updated = 'animal.updated',
+  Deleted = 'animal.deleted'
+}

@@ -1,12 +1,10 @@
 from django.urls import include, path
-
-from .views import AnimalView
-
 from rest_framework.routers import DefaultRouter
 
-# Create a router and register our ViewSets with it.
+from .views import AnimalJSONView
+
 router = DefaultRouter()
-router.register(r'animal', AnimalView)
+router.register(r'animal', AnimalJSONView)
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import {  HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { AnimalGateway } from './animal.gateway';
-import { IAnimal } from './animal.types';
+import { AnimalsGateway } from './animals.gateway';
+import { IAnimal } from './animals.types';
 import {HttpParams, provideHttpClient} from '@angular/common/http';
 
-describe('AnimalGateway', () => {
-  let service: AnimalGateway;
+describe('AnimalsGateway', () => {
+  let service: AnimalsGateway;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
@@ -13,11 +13,11 @@ describe('AnimalGateway', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        AnimalGateway
+        AnimalsGateway
       ],
     });
 
-    service = TestBed.inject(AnimalGateway);
+    service = TestBed.inject(AnimalsGateway);
     httpMock = TestBed.inject(HttpTestingController);
   });
 

@@ -1,13 +1,13 @@
 import {inject, Injectable} from '@angular/core';
 import {map, Observable} from 'rxjs';
-import {IAnimal, TAnimalPayload} from './animal.types';
+import {IAnimal, TAnimalPayload} from './animals.types';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import { Animal } from './animal.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AnimalGateway {
+export class AnimalsGateway {
 
   private readonly httpClient: HttpClient = inject(HttpClient)
 

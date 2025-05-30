@@ -1,9 +1,9 @@
 import {Component, inject} from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {LoadingService} from '../../services/loading.service';
+import {LoadingService} from '../../services/loading/loading.service';
 import {AsyncPipe} from '@angular/common';
 import {LoadingSpinnerComponent} from '../loading-spinner/loading-spinner.component';
-import {ToastService} from '../../services/toast.service';
+import {ToastService} from '../../services/toast/toast.service';
 import {concatMap, delay, map, merge, Observable, of} from 'rxjs';
 
 @Component({

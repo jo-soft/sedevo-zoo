@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EditComponent } from './edit.component';
 import {provideRouter, ActivatedRoute, ActivatedRouteSnapshot, Router} from '@angular/router';
-import { AnimalGateway } from '../../lib/services/animal.gateway';
-import { ToastService } from '../../lib/services/toast.service';
+import { AnimalsGateway } from '../../lib/services/animals/animals.gateway';
+import { ToastService } from '../../lib/services/toast/toast.service';
 import {of, throwError} from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Animal } from '../../lib/services/animal.model';
-import {IAnimal} from '../../lib/services/animal.types';
+import { Animal } from '../../lib/services/animals/animal.model';
+import {IAnimal} from '../../lib/services/animals/animals.types';
 
 describe('EditComponent', () => {
   let component: EditComponent;
   let fixture: ComponentFixture<EditComponent>;
-  let animalGatewayMock: jasmine.SpyObj<AnimalGateway>;
+  let animalGatewayMock: jasmine.SpyObj<AnimalsGateway>;
   let toastServiceMock: jasmine.SpyObj<ToastService>;
   let activatedRouteMock: jasmine.SpyObj<ActivatedRoute>;
   let routerMock: jasmine.SpyObj<Router>;
@@ -30,8 +30,8 @@ describe('EditComponent', () => {
       model: 'lion-model',
     };
 
-    animalGatewayMock = jasmine.createSpyObj<AnimalGateway>(
-      'AnimalGateway',
+    animalGatewayMock = jasmine.createSpyObj<AnimalsGateway>(
+      'AnimalsGateway',
       ['getAnimal', 'updateAnimal', 'createAnimal', 'uploadFile']
     );
     toastServiceMock = jasmine.createSpyObj<ToastService>('ToastService', ['setMessage']);
@@ -46,7 +46,7 @@ describe('EditComponent', () => {
       imports: [EditComponent, ReactiveFormsModule],
       providers: [
         provideRouter([]),
-        { provide: AnimalGateway, useValue: animalGatewayMock },
+        { provide: AnimalsGateway, useValue: animalGatewayMock },
         { provide: ToastService, useValue: toastServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock},
         { provide: Router, useValue: routerMock }

@@ -1,16 +1,29 @@
-import {Component, inject, ResourceLoaderParams, ResourceRef, signal, Signal, WritableSignal} from '@angular/core';
-import {AnimalGateway} from '../../lib/services/animal.gateway';
-import {Animal} from '../../lib/services/animal.model';
-import {rxResource, toSignal} from '@angular/core/rxjs-interop';import {RouterLink} from '@angular/router';
-import {debounceTime, firstValueFrom} from 'rxjs';
+import {
+  Component,
+  inject,
+  ResourceLoaderParams,
+  ResourceRef,
+  signal,
+  Signal,
+  WritableSignal
+} from '@angular/core';
+import {AnimalsGateway} from '../../lib/services/animals/animals.gateway';
+import {Animal} from '../../lib/services/animals/animal.model';
+import {rxResource, toSignal} from '@angular/core/rxjs-interop';
+import {RouterLink} from '@angular/router';
+import {debounceTime, firstValueFrom, map, merge, Observable} from 'rxjs';
 import {ModalComponent} from '../../lib/components/modal/modal.component';
 import {ModelViewerComponent} from '../../lib/components/model-viewer/model-viewer.component';
 import {LoadingSpinnerComponent} from '../../lib/components/loading-spinner/loading-spinner.component';
-import {ToastService} from '../../lib/services/toast.service';
+import {ToastService} from '../../lib/services/toast/toast.service';
 import {OrderButtonComponent} from '../../lib/components/order-button/order-button.component';
 import {HttpParams} from '@angular/common/http';
 import {InputComponent} from '../../lib/components/input/input.component';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {WebSocketService} from '../../lib/services/websocket/websockets.service';
+import {AnimalWebsocketMessageTypeEnum, IAnimal} from '../../lib/services/animals/animals.types';
+import {IWebsocketMessage} from '../../lib/services/websocket/websockets.types';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface IForm {
   name: FormControl<string | null>
@@ -38,8 +51,9 @@ type TFormData = Partial<{
 })
 export class OverviewComponent {
 
-  private readonly gateway: AnimalGateway = inject(AnimalGateway)
+  private readonly gateway: AnimalsGateway = inject(AnimalsGateway)
   private readonly toast: ToastService = inject(ToastService)
+  private readonly websocket: WebSocketService = inject(WebSocketService)
 
   public modelUrl: string | null = null
   public animalToDelete: Animal | null = null
@@ -96,6 +110,22 @@ export class OverviewComponent {
       this.gateway.getAnimals(params.request)
   })
 
+  public constructor() {
+    merge(
+      this.getOnWebsocketUpdated$(),
+      this.getupOnWebsocketDeleted$()
+    )
+    .pipe(
+      takeUntilDestroyed()
+    )
+    .subscribe(
+        (newAnimals: Animal[]) => {
+          this.animals.set(newAnimals);
+          this.toast.setMessage('Tiere wureden extern aktualisiert');
+        }
+      )
+  }
+
   public showModelModal(animal:Animal): void {
     this.modelUrl = animal.model;
   }
@@ -121,6 +151,29 @@ export class OverviewComponent {
       }
     }
     this.animalToDelete = null;
+  }
 
+  private getupOnWebsocketDeleted$(): Observable<Animal[]> {
+    return this.websocket.subscribe<number, AnimalWebsocketMessageTypeEnum.Deleted>([AnimalWebsocketMessageTypeEnum.Deleted])
+      .pipe(
+        map((message: IWebsocketMessage<number, AnimalWebsocketMessageTypeEnum.Deleted>) => message.data),
+        map(
+          (animalId: number) =>
+            this.animals.value().filter((animal: Animal) => animal.id !== animalId)
+        ),
+      )
+  }
+
+  private getOnWebsocketUpdated$(): Observable<Animal[]> {
+    return this.websocket.subscribe<IAnimal, AnimalWebsocketMessageTypeEnum.Created | AnimalWebsocketMessageTypeEnum.Updated>
+    ([AnimalWebsocketMessageTypeEnum.Updated, AnimalWebsocketMessageTypeEnum.Created])
+      .pipe(
+        map((message: IWebsocketMessage<IAnimal, AnimalWebsocketMessageTypeEnum.Created | AnimalWebsocketMessageTypeEnum.Updated>) => {
+          const animal = new Animal(message.data);
+          return message.type === AnimalWebsocketMessageTypeEnum.Created
+            ? [...this.animals.value(), animal]
+            : [...this.animals.value().filter((existingAnimal: Animal) => existingAnimal.id !== animal.id), animal];
+        }),
+    )
   }
 }
